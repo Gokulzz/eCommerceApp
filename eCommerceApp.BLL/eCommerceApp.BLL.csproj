@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\eCommerceApp.DAL\eCommerceApp.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
