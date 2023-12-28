@@ -7,7 +7,7 @@ using eCommerceApp.DAL.Models;
 
 namespace eCommerceApp.DAL.Repository
 {
-    public interface IPayMethodPaymentRepository : IGenericRepository<Paymentmethod>
+    public interface IPaymentMethodRepository : IGenericRepository<Paymentmethod>
     {
     }
 }

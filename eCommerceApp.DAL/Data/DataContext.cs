@@ -58,6 +58,12 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<CartItem>()
                 .HasOne(x => x.Cart).WithMany(x => x.CartItems)
                 .HasForeignKey(x => x.CartID);
+            modelBuilder.Entity<CartItem>()
+                 .HasOne(x => x.Product)
+                 .WithMany()
+                 .HasForeignKey(x => x.ProductID)
+                   .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Cart>()
                 .HasOne(x => x.user).WithOne(x => x.cart)
                 .HasForeignKey<Cart>(x => x.cartID);
