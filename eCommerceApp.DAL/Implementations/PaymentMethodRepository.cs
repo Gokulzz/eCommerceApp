@@ -9,7 +9,7 @@ using eCommerceApp.DAL.Repository;
 
 namespace eCommerceApp.DAL.Implementations
 {
-    public class PaymentMethodRepository : GenericRepository<Paymentmethod>, IPayMethodPaymentRepository
+    public class PaymentMethodRepository : GenericRepository<Paymentmethod>, IPaymentMethodRepository
     {
         public PaymentMethodRepository(DataContext dataContext) : base(dataContext)
         {
