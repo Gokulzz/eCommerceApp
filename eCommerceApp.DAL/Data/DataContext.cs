@@ -19,10 +19,7 @@ namespace eCommerceApp.DAL.Data
         {
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=localhost;Database=E-CommerceApp;Trusted_connection=True;");
-        //}
+    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(x => x.userId);

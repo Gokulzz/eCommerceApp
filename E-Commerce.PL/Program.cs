@@ -1,3 +1,4 @@
+using ConfigureManager;
 using eCommerceApp.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseExceptionMiddleware();
 
 app.UseAuthorization();
 

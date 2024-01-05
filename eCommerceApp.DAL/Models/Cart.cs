@@ -9,6 +9,7 @@ namespace eCommerceApp.DAL.Models
 {
     public class Cart
     {
+        [Key]
         public Guid cartID { get; set; }
 
         // Foreign key to associate the cart with a user
