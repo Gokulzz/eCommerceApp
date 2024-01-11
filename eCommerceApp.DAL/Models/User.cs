@@ -24,11 +24,13 @@ namespace eCommerceApp.DAL.Models
 
         public string Address { get; set; }
         public ICollection<Product> Products { get; set; }
-        //A single user can have many orders
+        //A single user can have many orderse
         public ICollection<Order> Orders { get; set; }
         //A single user can have multiple paymentMethods
         public ICollection<Paymentmethod> paymentmethods { get; set; }
         public DateTime? VerifiedAt { get; set; }
+        public string? RoleName { get; set; }   
+        
        
         
         

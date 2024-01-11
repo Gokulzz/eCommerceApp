@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eCommerceApp.DAL.Data;
+using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceApp.DAL.Implementations
 {
@@ -40,7 +42,16 @@ namespace eCommerceApp.DAL.Implementations
         {
             await dataContext.SaveChangesAsync();
         }
+        public async Task<User> FindUserByEmail(string email)
+        {
+            //we are retrieving the user of same email and also retreiving the role assigned to that user.
+            var user = await dataContext.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+            var roles = await RoleRepository.GetAsync(user.roleId);
+            user.RoleName = roles.Role_Name;
+            return user;
 
-       
+        }
+
+
     }
 }
