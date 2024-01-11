@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eCommerceApp.DAL.Models;
 
 namespace eCommerceApp.DAL.Repository
 {
@@ -17,7 +18,8 @@ namespace eCommerceApp.DAL.Repository
         public ICartItemRepository CartItemRepository { get; }
         public IPaymentRepository PaymentRepository { get; }
         public IPaymentMethodRepository PaymentMethodRepository { get; }
-        public ICategoryRepository categoryRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
         public Task Save();
+        public  Task<User> FindUserByEmail(string email);  
     }
 }
