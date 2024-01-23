@@ -30,9 +30,12 @@ namespace ConfigureManager
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();    
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IUnitofWork, UnitofWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICategoryService, CategoryService>();  
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
         }

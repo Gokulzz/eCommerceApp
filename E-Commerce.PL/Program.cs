@@ -102,6 +102,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseExceptionMiddleware();
+    app.UseAuthentication();
 
     app.UseAuthorization();
 

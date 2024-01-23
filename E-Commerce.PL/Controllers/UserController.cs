@@ -3,9 +3,11 @@ using eCommerceApp.BLL;
 using eCommerceApp.BLL.Implementations;
 using eCommerceApp.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace E_Commerce.PL.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         public IUserService UserService { get; set; }
@@ -43,6 +45,7 @@ namespace E_Commerce.PL.Controllers
             var delete_User = await UserService.DeleteUser(id);
             return delete_User;
         }
+       
         [HttpPost("VerifyUser")]
         public async Task<ApiResponse> VerifyUser(Guid token)
         {

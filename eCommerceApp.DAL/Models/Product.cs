@@ -10,7 +10,7 @@ namespace eCommerceApp.DAL.Models
     public class Product
     {
         [Key]
-        public Guid productId = new Guid();
+        public Guid productId = Guid.NewGuid();
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
