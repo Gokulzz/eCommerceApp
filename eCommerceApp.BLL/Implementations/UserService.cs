@@ -174,11 +174,11 @@ namespace eCommerceApp.BLL.Implementations
             using (var hmac = new HMACSHA512(PasswordSalt))
             {
                 var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(Password));
-                return computeHash.SequenceEqual(computeHash);
+                return computeHash.SequenceEqual(PasswordHash);
             }
         }
 
-        public Guid GenerateToken()
+        public static Guid GenerateToken()
         {
             Guid token = Guid.NewGuid();
             return token;

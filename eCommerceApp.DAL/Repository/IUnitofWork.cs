@@ -19,6 +19,7 @@ namespace eCommerceApp.DAL.Repository
         public IPaymentRepository PaymentRepository { get; }
         public IPaymentMethodRepository PaymentMethodRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
+        public IProductCategoryRepository ProductCategoryRepository { get; }
         public Task Save();
         public  Task<User> FindUserByEmail(string email);  
     }

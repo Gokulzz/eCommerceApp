@@ -64,6 +64,11 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<Cart>()
                 .HasOne(x => x.user).WithOne(x => x.cart)
                 .HasForeignKey<Cart>(x => x.cartID);
+            modelBuilder.Entity<Product>()
+
+               .HasMany(x => x.Categories)
+               .WithMany(x => x.products)
+               .UsingEntity<ProductCategory>();
         }
         public DbSet<Product> Products { get; set;}
         public DbSet<User> Users { get; set;}   
@@ -74,6 +79,6 @@ namespace eCommerceApp.DAL.Data
         public DbSet<Paymentmethod> PaymentMethod { get; set; } 
         public DbSet<Cart> Carts { get; set; }  
         public DbSet<CartItem> CartItems { get; set; }
-        
+        public DbSet<ProductCategory> CategoryProduct { get; set; } 
     }
 }
