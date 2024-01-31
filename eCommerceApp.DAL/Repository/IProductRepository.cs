@@ -9,6 +9,7 @@ namespace eCommerceApp.DAL.Repository
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
+        public Task<double> GetProductprice(Guid id);
 
     }
 }

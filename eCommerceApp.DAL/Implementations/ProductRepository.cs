@@ -16,5 +16,13 @@ namespace eCommerceApp.DAL.Implementations
         {
             
         }
+        public async Task<double> GetProductprice(Guid id)
+        {
+            var find_product= await dataContext.Products.FindAsync(id);
+            return find_product.Price;
+
+            
+        }
     }
+    
 }

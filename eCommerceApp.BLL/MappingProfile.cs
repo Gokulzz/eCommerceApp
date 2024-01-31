@@ -17,6 +17,7 @@ namespace eCommerceApp.BLL
             CreateMap<UserDTO, User>(); 
             CreateMap<CategoryDTO, Category>(); 
             CreateMap<ProductDTO, Product>();
+            CreateMap<OrderDetailDTO, Orderdetails>();
         }
     }
 }

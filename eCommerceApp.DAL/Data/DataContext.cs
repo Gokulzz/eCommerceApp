@@ -48,7 +48,8 @@ namespace eCommerceApp.DAL.Data
                 .WithMany(x => x.products);
             modelBuilder.Entity<Orderdetails>()
                 .HasOne(x => x.order).WithMany(x => x.orderDetails)
-                .HasForeignKey(x => x.orderId);
+                .HasForeignKey(x => x.orderId)
+                 .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Payment>()
                 .HasOne(x => x.paymentmethod).WithMany(x => x.payments)
                 .HasForeignKey(x => x.paymentMethodId);

@@ -10,9 +10,12 @@ namespace eCommerceApp.DAL.Models
     public class Order
     {
         [Key]
-        public Guid orderId = new Guid();
+        public Guid orderId { get; set; }
         public DateTime orderDate { get; set; }
+        //this is the total amount before tax
         public double totalAmount { get; set; }
+        //total amount after tax 
+        public double grandTotal { get; set; }  
         public string Status { get; set; }
         public Guid userId { get; set; }
         public User user { get; set; }
