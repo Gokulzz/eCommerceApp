@@ -17,6 +17,8 @@ namespace eCommerceApp.DAL.Models
         public int Quantity { get; set; } = 0;
         public Guid userId { get; set; }
         public User user { get; set; }
+
+        public string FilePath { get; set; }    
         public ICollection<Category> Categories { get; set; }
 
     }

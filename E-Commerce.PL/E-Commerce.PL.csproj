@@ -27,4 +27,8 @@
     <ProjectReference Include="..\eCommerceApp.BLL\eCommerceApp.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Content\Files\" />
+  </ItemGroup>
+
 </Project>

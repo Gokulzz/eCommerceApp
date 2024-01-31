@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using eCommerceApp.BLL.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerceApp.BLL.Services
 {
@@ -14,8 +15,10 @@ namespace eCommerceApp.BLL.Services
         public Task<ApiResponse> GetProduct(Guid productId);  
         public Task<ApiResponse> AddProduct(ProductDTO product);
         public Task<ApiResponse> UpdateProduct(ProductDTO product); 
-        public Task<ApiResponse> DeleteProduct(Guid productId); 
-        
+        public Task<ApiResponse> DeleteProduct(Guid productId);
+        public  Task<double> GetProductprice(Guid productId);
+
+
     }
 }
     

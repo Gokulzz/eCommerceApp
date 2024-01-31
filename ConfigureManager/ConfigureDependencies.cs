@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using eCommerceApp.BLL.Implementations;
 using eCommerceApp.BLL.Services;
@@ -36,8 +37,11 @@ namespace ConfigureManager
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();  
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
+            services.AddControllers().AddJsonOptions(x =>
+              x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         }
 
     }

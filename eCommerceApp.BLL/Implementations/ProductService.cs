@@ -9,6 +9,9 @@ using eCommerceApp.BLL.Services;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
 using FluentValidation.Results;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 
 namespace eCommerceApp.BLL.Implementations
@@ -17,11 +20,13 @@ namespace eCommerceApp.BLL.Implementations
     {
         public IUnitofWork unitofWork { get; set; }
         public IUserService userService { get; set; }   
+        public IWebHostEnvironment webHost { get; set; }
         public IMapper mapper { get; set; } 
-        public ProductService(IUnitofWork unitofWork, IMapper mapper, IUserService userService) { 
+        public ProductService(IUnitofWork unitofWork, IMapper mapper, IUserService userService, IWebHostEnvironment webHost) { 
             this.unitofWork = unitofWork;
             this.mapper = mapper;
             this.userService= userService;
+            this.webHost = webHost;
         }
         public async Task<ApiResponse> GetAllProducts()
         {
@@ -36,9 +41,13 @@ namespace eCommerceApp.BLL.Implementations
         }
         public async Task<ApiResponse> AddProduct(ProductDTO productDTO)
         {
-            
+            var path = webHost.WebRootPath;
+            var filePath = "Content/Files/" + productDTO.fileData.FileName;
+            var fullPath = Path.Combine(path, filePath);
+            await productDTO.fileData.CopyToAsync(new FileStream(fullPath, FileMode.Create));
             var add_product = mapper.Map<Product>(productDTO);
             add_product.userId = userService.GetCurrentId();
+            add_product.FilePath = filePath;
             var productCategory = new ProductCategory()
             {
                 productsproductId = add_product.productId,
@@ -47,7 +56,7 @@ namespace eCommerceApp.BLL.Implementations
             await unitofWork.ProductRepository.PostAsync(add_product);
             await unitofWork.ProductCategoryRepository.PostAsync(productCategory);
             await unitofWork.Save();
-            return new ApiResponse(200, "New Product Added successfully", add_product);
+            return new  ApiResponse(200, "New Product Added successfully", add_product);
         }
         public async Task<ApiResponse> UpdateProduct(ProductDTO productDTO)
         {
@@ -61,6 +70,11 @@ namespace eCommerceApp.BLL.Implementations
             return new ApiResponse(200, "Category deleted successsfully", delete_product);
 
 
+        }
+        public async Task<double> GetProductprice(Guid productId)
+        {
+            var product= await unitofWork.ProductRepository.GetProductprice(productId);
+            return product;
         }
     }
 
