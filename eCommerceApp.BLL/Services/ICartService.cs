@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace eCommerceApp.BLL.Services
 {
-   public interface ICart
+    public interface ICartService
     {
+
     }
 }

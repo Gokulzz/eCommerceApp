@@ -21,6 +21,7 @@ namespace eCommerceApp.DAL.Models
         public Role role { get; set; }
         //User can order many products
         public Cart cart { get; set; }
+        public Guid cartId { get; set; }
 
         public string Address { get; set; }
         public ICollection<Product> Products { get; set; }

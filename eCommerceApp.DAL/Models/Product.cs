@@ -19,6 +19,7 @@ namespace eCommerceApp.DAL.Models
         public User user { get; set; }
 
         public string FilePath { get; set; }    
+        public ICollection<CartItem> CartItems { get; set; }
         public ICollection<Category> Categories { get; set; }
 
     }

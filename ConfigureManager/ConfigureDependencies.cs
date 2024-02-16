@@ -38,6 +38,7 @@ namespace ConfigureManager
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();  
             services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<ICartItemService, CartItemService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
             services.AddControllers().AddJsonOptions(x =>

@@ -9,5 +9,6 @@ namespace eCommerceApp.DAL.Repository
 {
     public interface ICartItemRepository : IGenericRepository<CartItem>
     {
+      
     }
 }
