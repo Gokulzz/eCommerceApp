@@ -72,6 +72,7 @@ namespace eCommerceApp.BLL.Implementations
             return new ApiResponse(200, "Category deleted successsfully", delete_order);
 
 
+
         }
         public double calculateTotal(int quantity, double price)
         {

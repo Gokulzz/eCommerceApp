@@ -32,6 +32,15 @@ namespace eCommerceApp.DAL.Implementations
             var add_Data = await dataContext.Set<T>().AddAsync(entity);
             return entity;
         }
+        public async Task<List<T>> PostMultiple(List<T> entities)
+        {
+            await dataContext.Set<T>().AddRangeAsync(entities);
+            return entities;
+          
+
+
+           
+        }
         public async Task<T> UpdateAsync(T entity)
         {
             var update_Data = dataContext.Set<T>().Update(entity);

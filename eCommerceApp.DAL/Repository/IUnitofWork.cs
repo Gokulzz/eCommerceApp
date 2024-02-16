@@ -21,6 +21,7 @@ namespace eCommerceApp.DAL.Repository
         public ICategoryRepository CategoryRepository { get; }
         public IProductCategoryRepository ProductCategoryRepository { get; }
         public Task Save();
-        public  Task<User> FindUserByEmail(string email);  
+        public  Task<User> FindUserByEmail(string email);
+       
     }
 }

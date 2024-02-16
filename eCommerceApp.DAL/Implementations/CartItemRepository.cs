@@ -11,9 +11,14 @@ namespace eCommerceApp.DAL.Implementations
 {
     public class CartItemRepository : GenericRepository<CartItem>, ICartItemRepository
     {
+        
+        
         public CartItemRepository(DataContext dataContext) : base(dataContext)
         {
+          
+            
 
         }
+        
     }
 }

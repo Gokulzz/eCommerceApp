@@ -10,7 +10,8 @@ namespace eCommerceApp.DAL.Repository
     {
         Task<List<T>> GetAllAsync();
         Task<T> GetAsync(Guid id);
-        Task<T> PostAsync(T entity);    
+        Task<T> PostAsync(T entity);   
+        Task<List<T>> PostMultiple(List<T> entities);   
         Task<T> DeleteAsync(Guid id);  
         Task<T> UpdateAsync(T entity);
         Task<List<T>> DeleteAllAsync();

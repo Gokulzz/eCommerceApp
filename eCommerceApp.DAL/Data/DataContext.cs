@@ -25,6 +25,7 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<User>().HasKey(x => x.userId);
             modelBuilder.Entity<Role>().HasKey(x => x.RoleId);
             modelBuilder.Entity<Cart>().HasKey(x => x.cartID);
+            modelBuilder.Entity<CartItem>().HasKey(x => x.CartItemID);
             modelBuilder.Entity<Category>().HasKey(x => x.categoryId);
             modelBuilder.Entity<Order>().HasKey(x => x.orderId);
             modelBuilder.Entity<Orderdetails>().HasKey(x => x.orderDetailId);
@@ -58,13 +59,13 @@ namespace eCommerceApp.DAL.Data
                 .HasForeignKey(x => x.CartID);
             modelBuilder.Entity<CartItem>()
                  .HasOne(x => x.Product)
-                 .WithMany()
+                 .WithMany(x=>x.CartItems)
                  .HasForeignKey(x => x.ProductID)
                    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(x => x.user).WithOne(x => x.cart)
-                .HasForeignKey<Cart>(x => x.cartID);
+                .HasForeignKey<Cart>(x => x.userId);
             modelBuilder.Entity<Product>()
 
                .HasMany(x => x.Categories)
