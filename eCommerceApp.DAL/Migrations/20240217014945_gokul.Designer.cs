@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCommerceApp.DAL.Data;
 
@@ -11,9 +12,11 @@ using eCommerceApp.DAL.Data;
 namespace eCommerceApp.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240217014945_gokul")]
+    partial class gokul
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace eCommerceApp.DAL.Migrations
                     b.HasIndex("userId")
                         .IsUnique();
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.CartItem", b =>
@@ -60,7 +63,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Category", b =>
@@ -79,7 +82,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasKey("categoryId");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Order", b =>
@@ -108,7 +111,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Orderdetails", b =>
@@ -135,7 +138,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("productId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Payment", b =>
@@ -167,7 +170,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("paymentMethodId");
 
-                    b.ToTable("Payment", (string)null);
+                    b.ToTable("Payment");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Paymentmethod", b =>
@@ -203,7 +206,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("PaymentMethod", (string)null);
+                    b.ToTable("PaymentMethod");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Product", b =>
@@ -237,7 +240,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.ProductCategory", b =>
@@ -252,7 +255,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("productsproductId");
 
-                    b.ToTable("CategoryProduct", (string)null);
+                    b.ToTable("CategoryProduct");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Role", b =>
@@ -271,7 +274,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.User", b =>
@@ -319,7 +322,7 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasIndex("roleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("eCommerceApp.DAL.Models.Cart", b =>

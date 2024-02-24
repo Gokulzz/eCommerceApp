@@ -8,5 +8,7 @@ namespace eCommerceApp.BLL.Services
 {
     public interface IPaymentMethod
     {
+        public Task<ApiResponse> GetAllPaymentMethod();
+        public Task<ApiResponse> AddPaymentMethod();
     }
 }

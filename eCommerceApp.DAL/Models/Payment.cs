@@ -11,13 +11,15 @@ namespace eCommerceApp.DAL.Models
     {
 
         [Key]
-        public Guid paymentId = new Guid();
-        public int Amount { get; set; }
+        public Guid paymentId = Guid.NewGuid();
+        public double Amount { get; set; }
         public DateTime paymentDate { get; set; }
         public string Status { get; set; }
         public Guid paymentMethodId { get; set; }
         // A single payment is associated with single payment method.
-        public Paymentmethod paymentmethod { get; set; }
+        public Order order { get; set; }
+        public Guid orderId { get; set; }    
+        public CustomerPaymentMethod paymentmethod { get; set; }
         
         
 

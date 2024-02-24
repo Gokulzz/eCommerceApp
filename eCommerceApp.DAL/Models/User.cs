@@ -28,7 +28,7 @@ namespace eCommerceApp.DAL.Models
         //A single user can have many orders
         public ICollection<Order> Orders { get; set; }
         //A single user can have multiple paymentMethods
-        public ICollection<Paymentmethod> paymentmethods { get; set; }
+        public ICollection<CustomerPaymentMethod> paymentmethods { get; set; }
         public DateTime? VerifiedAt { get; set; }
         public string? RoleName { get; set; }   
         
