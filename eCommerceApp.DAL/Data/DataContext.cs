@@ -30,7 +30,7 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<Order>().HasKey(x => x.orderId);
             modelBuilder.Entity<Orderdetails>().HasKey(x => x.orderDetailId);
             modelBuilder.Entity<Payment>().HasKey(x => x.paymentId);
-            modelBuilder.Entity<Paymentmethod>().HasKey(x => x.paymentMethodId);
+            modelBuilder.Entity<CustomerPaymentMethod>().HasKey(x => x.paymentMethodId);
             modelBuilder.Entity<Product>().HasKey(x => x.productId);
             modelBuilder.Entity<User>()
                 .HasOne(x => x.role).WithMany(x => x.users)
@@ -41,7 +41,7 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<Order>()
                 .HasOne(x=>x.user).WithMany(x => x.Orders)
                 .HasForeignKey(x=>x.userId);
-            modelBuilder.Entity<Paymentmethod>()
+            modelBuilder.Entity<CustomerPaymentMethod>()
                 .HasOne(x => x.user).WithMany(x => x.paymentmethods)
                 .HasForeignKey(x => x.userId);
             modelBuilder.Entity<Product>()
@@ -71,6 +71,9 @@ namespace eCommerceApp.DAL.Data
                .HasMany(x => x.Categories)
                .WithMany(x => x.products)
                .UsingEntity<ProductCategory>();
+            modelBuilder.Entity<Payment>()
+                .HasOne(x => x.order).WithOne(x => x.payment)
+                .HasForeignKey<Payment>(x => x.orderId);
         }
         public DbSet<Product> Products { get; set;}
         public DbSet<User> Users { get; set;}   
@@ -78,7 +81,7 @@ namespace eCommerceApp.DAL.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Orderdetails> OrderDetails { get; set; }
         public DbSet<Payment> Payment { get; set; }
-        public DbSet<Paymentmethod> PaymentMethod { get; set; } 
+        public DbSet<CustomerPaymentMethod> PaymentMethod { get; set; } 
         public DbSet<Cart> Carts { get; set; }  
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<ProductCategory> CategoryProduct { get; set; } 

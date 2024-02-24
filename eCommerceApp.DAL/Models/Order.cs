@@ -19,6 +19,7 @@ namespace eCommerceApp.DAL.Models
         public string Status { get; set; }
         public Guid userId { get; set; }
         public User user { get; set; }
+        public Payment payment { get; set; }
         public ICollection<Orderdetails> orderDetails { get; set; }
 
 

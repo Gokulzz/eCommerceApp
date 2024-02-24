@@ -12,6 +12,7 @@ using eCommerceApp.DAL.Implementations;
 using eCommerceApp.DAL.Repository;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
 
 namespace ConfigureManager
 {
@@ -35,10 +36,15 @@ namespace ConfigureManager
             services.AddScoped<IUnitofWork, UnitofWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductService, eCommerceApp.BLL.Implementations.ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();  
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<IStripeService, StripeService>();
+            services.AddScoped<TokenService>();
+            services.AddScoped<CustomerService>();
+            services.AddScoped<ChargeService>();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
             services.AddControllers().AddJsonOptions(x =>
