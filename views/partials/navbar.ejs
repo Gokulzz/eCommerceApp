@@ -1,0 +1,148 @@
+<!-- views/partials/navbar.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Your existing head content... -->
+
+    <style>
+        .navbar {
+            background-color: #343a40; /* Dark background color */
+            padding: 15px;
+            border-bottom: 1px solid #ffffff; /* White border at the bottom */
+        }
+
+        .navbar-brand {
+            color: #ffffff; /* White text color */
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-right: auto; /* Push the brand to the left */
+        }
+
+        .navbar-nav,
+        .form-inline {
+            display: flex;
+            align-items: center; /* Center items vertically */
+        }
+
+        .navbar-nav {
+            margin-right: 10px;
+        }
+
+        .form-inline {
+            width: auto;
+        }
+
+        .navbar-nav .nav-item {
+            margin-right: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff; /* White text color */
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #28a745; /* Change color on hover (green) */
+        }
+
+        .form-inline .form-control {
+            width: 300px;
+            margin-right: 10px;
+        }
+
+        .form-inline .btn {
+            background-color: #28a745; /* Green button */
+            color: #ffffff; /* White text color */
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-inline .btn:hover {
+            background-color: #218838; /* Darker shade on hover */
+        }
+
+        #welcomeMessage {
+            margin-top: 8px;
+            margin-left: 10px;
+            color: #28a745; /* Green text color for welcome message */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <!-- GK Store Text -->
+            <a class="navbar-brand" href="/">
+                GK Store
+            </a>
+
+            <!-- Search Bar -->
+            <!-- Add an id to the search form and a container for displaying product details -->
+<form class="form-inline" id="searchForm">
+  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:400px;">
+  <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+      Search
+  </button>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+
+<!-- Add a script for handling the search form submission and fetching product details -->
+<script>
+  $(document).ready(function () {
+      // Handle form submission
+      $("#searchForm").submit(function (event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          // Redirect to a new page with the search query
+          const searchQuery = $("input[type=search]").val();
+          window.location.href = `/search?query=${searchQuery}`;
+      });
+  });
+</script>
+
+
+            <!-- Navigation Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">
+                        Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/account">
+                        Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">
+                        Contact
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Welcome Message -->
+            <div id="welcomeMessage"></div>
+        </div>
+    </nav>
+
+    <!-- Your existing body content... -->
+
+</body>
+
+</html>

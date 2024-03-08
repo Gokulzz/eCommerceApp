@@ -1,0 +1,208 @@
+<!-- views/home.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce Store</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #1a1a1a; /* Dark background color */
+      color: #ffffff; /* White text color */
+      margin: 0; /* Remove default margin */
+      padding: 0; /* Remove default padding */
+    }
+
+    .container {
+      padding-top: 20px; /* Adjusted padding-top */
+    }
+
+    .card {
+      background-color: #292929; /* Dark card background color */
+      border: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+    }
+
+    .card-title,
+    .card-text {
+      color: #ffffff; /* White text color for card title and text */
+    }
+
+    .card-body {
+      height: 200px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Additional Styles for Sections */
+    .left-section,
+    .right-section {
+      background-color: #333; /* Dark background color for sections */
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .section-title {
+      color: #ffffff;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .category-item {
+      margin-bottom: 20px;
+    }
+
+    .category-image {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    /* Styling for Product Grid */
+    .product-grid {
+      margin-top: 30px;
+    }
+
+    .product-grid .card {
+      transition: transform 0.3s;
+    }
+
+    .product-grid .card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include('../partials/navbar') %>
+
+  <div class="container mt-4">
+    <h1 class="display-4">Welcome to Our E-Commerce Store!</h1>
+
+    <!-- Left Section -->
+    <div class="row">
+      <div class="col-md-3">
+        <div class="left-section">
+          <h2 class="section-title">Featured Categories</h2>
+          <!-- Add content for the left section as needed -->
+          <div class="category-item">
+            <img src="/public/images/macbook.jpg" alt="Category 1" class="category-image">
+            <h3>Electronics</h3>
+            <p>Explore the latest gadgets and tech innovations.</p>
+            <a href="#" class="btn btn-primary">Shop Now</a>
+          </div>
+          <div class="category-item">
+            <img src="/public/images/kors.jpg" alt="Category 2" class="category-image">
+            <h3>Fashion</h3>
+            <p>Discover trendy bags for every occasion.</p>
+            <a href="#" class="btn btn-primary">Shop Now</a>
+          </div>
+          <div class="category-item">
+            <img src="/public/images/book.jpg" alt="Category 3" class="category-image">
+            <h3>Books</h3>
+            <p>Dive into captivating stories and knowledge.</p>
+            <a href="#" class="btn btn-primary">Shop Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Grid Section -->
+      <!-- ... your existing code ... -->
+
+
+<div class="col-md-6 product-grid">
+  <h2 class="section-title">New Arrivals</h2>
+  <div class="row">
+    <% products.forEach(product => { %>
+      <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+        <div class="card">
+          <img src="/public/images/<%= product.image %>" class="card-img-top" alt="<%= product.name %>">
+          <div class="card-body d-flex flex-column">
+            <div>
+              <h5 class="card-title mb-2"><%= product.name %></h5>
+              <p class="card-text mb-2">$<%= product.price.toFixed(1) %></p>
+            </div>
+            <!-- Add a button or link for product details -->
+            <a href="#" class="btn btn-primary mt-auto">View Details</a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<!-- ... your existing code ... -->
+
+
+<!-- ... your existing code ... -->
+
+
+      <!-- Right Section -->
+      <div class="col-md-3">
+        <div class="right-section">
+          <h2 class="section-title">Latest Offers</h2>
+
+          <!-- Offer Card 1 -->
+          <div class="card offer-card">
+            <img src="/public/images/clothes.jpg" class="card-img-top" alt="Offer 1">
+            <div class="card-body">
+              <h5 class="card-title">Special Discount</h5>
+              <p class="card-text">Get 20% off on selected items. Limited time offer!</p>
+              <a href="#" class="btn btn-primary">Claim Offer</a>
+            </div>
+          </div>
+
+          <!-- Offer Card 2 -->
+          <div class="card offer-card">
+            <img src="/public/images/jordan.jpg" class="card-img-top" alt="Offer 2">
+            <div class="card-body">
+              <h5 class="card-title">Flash Sale</h5>
+              <p class="card-text">Don't miss our exclusive flash sale. Grab your favorites now!</p>
+              <a href="#" class="btn btn-primary">Shop Now</a>
+            </div>
+          </div>
+
+          <!-- Offer Card 3 -->
+          <div class="card offer-card">
+            <img src="/public/images/headphones.jpg" class="card-img-top" alt="Offer 3">
+            <div class="card-body">
+              <h5 class="card-title">Bundle Deal</h5>
+              <p class="card-text">Save big with our bundle deals. Perfect for your needs!</p>
+              <a href="#" class="btn btn-primary">Explore Bundles</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- views/home.ejs -->
+
+<!-- ... Your existing HTML content ... -->
+
+<script>
+  // Extract welcome message from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const welcomeMessage = urlParams.get('welcome');
+
+  // Display the welcome message in the navbar
+  const welcomeMessageElement = document.getElementById('welcomeMessage');
+
+  if (welcomeMessageElement && welcomeMessage) {
+    welcomeMessageElement.innerText = welcomeMessage;
+  }
+</script>
+
+<!-- ... Your existing HTML content ... -->
+
+
+</body>
+
+</html>
