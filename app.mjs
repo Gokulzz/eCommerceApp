@@ -32,6 +32,13 @@ app.get('/signup', (req,res )=> {
 app.get('/search', (req, res) => {
   res.render('pages/search', {title: "Search page"});
 });
+app.get('/admin', (req, res)=> {
+  res.render('pages/admin', {title: "Admin page"});
+});
+app.get('/admin/add-product', (req, res)=> {
+  res.render('pages/add-product', {title: "Add product page"});
+});
+
 
 // Start the server
 app.listen(port, () => {

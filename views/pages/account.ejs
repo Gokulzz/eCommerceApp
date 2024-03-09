@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+   
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +10,8 @@
 
     <!-- Font Awesome for icons (you can include it from a CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   
+    
 
 
     <style>
@@ -167,8 +170,12 @@
 
                     if (userDetailsResponse.ok) {
                         const userDetails = await userDetailsResponse.json();
-                        
+                        const roleName= userDetails.result.roleName;
                         const userName = userDetails.result.userName;
+                        if(roleName=="Admin") {
+                            window.location.href = '/admin';
+                        }
+                        else {
                         console.log(`Hello ${userName}!`);
 
                         // Display the welcome message in the navbar
@@ -184,6 +191,7 @@
                 } else {
                     console.error('Element with ID "welcomeMessage" not found.');
                 }
+            }
 
                         // Optionally, you can remove the alert since you're redirecting
                         // alert('Login successful!');
@@ -194,6 +202,7 @@
                     const errorData = await response.json();
                     alert(`Login failed: ${errorData.message}`);
                 }
+            
             } catch (error) {
                 console.error('Error during login:', error);
             }
