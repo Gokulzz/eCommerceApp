@@ -11,6 +11,7 @@ namespace eCommerceApp.BLL.Services
     {
         public Task<ApiResponse> GetAllUser();
         public Task<ApiResponse> GetUser(Guid Id);
+        public Task<ApiResponse> GetUserByEmail(string Email);  
         public Task<ApiResponse> AddUser(UserDTO userDTO);
         public Task<ApiResponse> UpdateUser(Guid Id, UserDTO userDTO);
         public Task<ApiResponse> DeleteUser(Guid Id);

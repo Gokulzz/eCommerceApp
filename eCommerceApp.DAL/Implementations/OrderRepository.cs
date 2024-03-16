@@ -15,5 +15,10 @@ namespace eCommerceApp.DAL.Implementations
         {
 
         }
+        public async Task<double> GetOrderAmount(Guid id)
+        {
+            var amount= await dataContext.Orders.FindAsync(id);
+            return amount.totalAmount;
+        }
     }
 }

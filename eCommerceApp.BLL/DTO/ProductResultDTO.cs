@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace eCommerceApp.BLL.DTO
 {
-    public class ProductDTO
+    public class ProductResultDTO
     {
-       
+        public Guid productId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; } 
-        public IFormFile fileData { get; set; } 
-        public Guid CategoryId { get; set; }
-        
-      
+        public int Quantity { get; set; }
+        public string filePath { get; set; }
+       
     }
- }
+
+    
+}

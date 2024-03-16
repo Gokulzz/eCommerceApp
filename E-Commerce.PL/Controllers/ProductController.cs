@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace E_Commerce.PL.Controllers
 {
-    [Authorize]
+    
     public class ProductController : Controller
     {
         public IProductService productService { get; set; } 
@@ -15,11 +15,17 @@ namespace E_Commerce.PL.Controllers
         {
             this.productService = productService;
         }
-        [HttpGet("GetProduct")]
-        public async Task<ApiResponse> GetProduct(Guid id)
+        [HttpGet("GetProductById/{id}")]
+        public async Task<ApiResponse> GetProductById(Guid id)
         {
             var category = await productService.GetProduct(id);
             return category;
+        }
+        [HttpGet("GetProductByName")]
+        public async Task<ApiResponse> GetProductByName(string productName)
+        {
+            var product= await productService.GetByName(productName);
+            return product;
         }
         [HttpGet("GetAllProduct")]
         public async Task<ApiResponse> GetAllProduct()
@@ -27,8 +33,15 @@ namespace E_Commerce.PL.Controllers
             var allCategory = await productService.GetAllProducts();
             return allCategory;
         }
+        [HttpGet("GetPagedProducts")]
+        public async Task<ApiResponse> GetPagedProducts(PaginationFiltersDTO paginationFiltersDTO)
+        {
+            var getData = await productService.GetPagedData(paginationFiltersDTO);
+            return getData;
+        }
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddProduct")]
-        public async Task<ApiResponse> AddProduct(ProductDTO product)
+        public async Task<ApiResponse> AddProduct( ProductDTO product)
         {
             var addCategory = await productService.AddProduct(product);
             return addCategory;

@@ -32,6 +32,15 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.ConfigureDependency();
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+    });
     builder.Configuration.GetValue<string>("StripeOptions:PublicKey");
     StripeConfiguration.ApiKey = builder.Configuration.GetValue<string>("StripeOptions:SecretKey");
     builder.Services.AddDbContext<DataContext>(options =>
@@ -90,6 +99,11 @@ try
             };
 
         });
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetSection("RedisCacheServerURL").Value;
+    });
+    
 
     var app = builder.Build();
 
@@ -106,6 +120,9 @@ try
     app.UseHttpsRedirection();
     app.UseExceptionMiddleware();
     app.UseAuthentication();
+    app.UseCors("AllowAll");
+    app.UseStaticFiles();
+
 
     app.UseAuthorization();
 

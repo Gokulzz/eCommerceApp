@@ -14,7 +14,7 @@ namespace E_Commerce.PL.Controllers
             this.userService = userService;
         }
         [HttpPost("UserLogin")]
-        public async Task<ApiResponse> UserLogin(UserLoginDTO userLogin)
+        public async Task<ApiResponse> UserLogin([FromBody] UserLoginDTO userLogin)
         {
             var user_login = await userService.LoginUser(userLogin);
             return user_login;

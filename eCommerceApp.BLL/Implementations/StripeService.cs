@@ -22,19 +22,22 @@ namespace eCommerceApp.BLL.Implementations
         private readonly ChargeService _chargeService;
         private readonly IUnitofWork _unitofWork;
         private readonly IUserService _userService;
+        private readonly IOrderRepository _orderRepository;
 
         public StripeService(
             TokenService tokenService,
             CustomerService customerService,
             ChargeService chargeService,
             IUnitofWork unitofWork,
-            IUserService userService)
+            IUserService userService,
+            IOrderRepository orderRepository)
         {
             _tokenService = tokenService;
             _customerService = customerService;
             _chargeService = chargeService;
             _unitofWork = unitofWork;
             _userService = userService;
+            _orderRepository = orderRepository;
             
         }
 
@@ -98,6 +101,8 @@ namespace eCommerceApp.BLL.Implementations
                
                 throw new ArgumentNullException(nameof(resource));
             }
+            //we are converting the amount to smallest currency  which helps avoid rounding errors and ensures that
+            //the calculations are performed with integer values.
             long payment_Amount = (long)Math.Round((paymentDTO.amount * 100));
             var chargeOptions = new ChargeCreateOptions
             {
@@ -108,18 +113,19 @@ namespace eCommerceApp.BLL.Implementations
                 Description = resource.Description
             };
             var charge = await _chargeService.CreateAsync(chargeOptions, null, cancellationToken);
+            var total_Amount = await _orderRepository.GetOrderAmount(paymentDTO.orderId);
             var payment = new Payment()
             {
                 Amount = paymentDTO.amount,
                 paymentDate = DateTime.Now,
-                Status = "Paid",
+                Status =(total_Amount==paymentDTO.amount)?"Paid": "Partially Paid",
                 paymentMethodId = paymentDTO.paymentMethodId,
                 orderId = paymentDTO.orderId
             };
             await _unitofWork.PaymentRepository.PostAsync(payment);
             await _unitofWork.Save();
 
-            return new ChargeResource(
+                return new ChargeResource(
                 charge.Id,
                 charge.Currency,
                 charge.Amount,
@@ -127,5 +133,6 @@ namespace eCommerceApp.BLL.Implementations
                 charge.ReceiptEmail,
                 charge.Description);
         }
+        
     }
 }

@@ -5,14 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.PL.Controllers
 {
+    //[Route("api/[Controller]")]
     public class CategoryController : Controller
     {
+       
         public ICategoryService service { get; set; }
+        
         public CategoryController(ICategoryService service)
         {
             this.service = service;
         }
-        [HttpGet("GetCategory")]
+        [HttpGet("GetCategory/{id}")]
         public async Task<ApiResponse> GetCategory(Guid id)
         {
             var category = await service.GetCategory(id);

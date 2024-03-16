@@ -37,11 +37,12 @@ namespace eCommerceApp.BLL.Implementations
         public async Task<ApiResponse> GetAllCategory()
         {
             var categories = await unitofWork.CategoryRepository.GetAllAsync();
+            var mapCategory= mapper.Map<List<CategoryDTO>>(categories);
             if (categories == null)
             {
                 throw new NotFoundException("No categories found");
             }
-            return new ApiResponse(200, "Categories returned successfully", categories);
+            return new ApiResponse(200, "Categories returned successfully", mapCategory);
         }
         public async Task<ApiResponse> AddCategory(CategoryDTO categoryDTO)
         {
