@@ -1,0 +1,147 @@
+<!-- views/product.ejs -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jwt-decode/3.1.2/jwt-decode.min.js"></script>
+
+ 
+
+</head>
+
+<%- include('../partials/navbar') %>
+<body>
+
+  <div class="container mt-4">
+    <h1 class="display-4">Product Details</h1>
+    <div id="productDetailsContainer">
+      <!-- Product details will be dynamically added here -->
+    </div>
+  </div>
+
+  <script>
+ 
+
+    async function fetchProductDetails() {
+      const productId = window.location.pathname.split('/').pop();
+      try {
+        const response = await fetch(`https://localhost:7114/GetProductById/${productId}`);
+        const data = await response.json();
+        if (data.result) {
+          // Display product details in the container
+          document.getElementById("productDetailsContainer").innerHTML = `
+              <div class="card">
+                <img src="https://localhost:7114/${data.result.filePath}" alt="${data.result.name}">
+                <div class="card-body">
+                  <h5 class="card-title">${data.result.name}</h5>
+                  <p class="card-text">Description: ${data.result.description}</p>
+                  <p class="card-text">Price: $${data.result.price.toFixed(2)}</p>
+                  <p class="card-text">Available Quantity: <span id="availableQuantity">${data.result.quantity}</span></p>
+                  <div class="form-group">
+                    <label for="quantitySelect">Select Quantity:</label>
+                    <select class="form-control" id="quantitySelect">
+                      ${generateQuantityOptions(data.result.quantity)}
+                    </select>
+                  </div>
+                  <button class="btn btn-primary mt-auto add-to-cart-btn"> Add to Cart</button>
+                </div>
+              </div>`;
+          // Call addToCart function with productId as parameter
+          document.querySelector('.add-to-cart-btn').addEventListener('click', () => addToCart(productId));
+        } else {
+          // Handle case of no product found
+          document.getElementById("productDetailsContainer").innerHTML = '<p>No product found.</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+        // Handle error case
+        document.getElementById("productDetailsContainer").innerHTML = '<p>Error fetching product details.</p>';
+      }
+    }
+
+    async function addToCart(productId) {
+  const selectedQuantity = parseInt(document.getElementById("quantitySelect").value);
+  const availableQuantity = parseInt(document.getElementById("availableQuantity").innerText);
+
+  const authToken = localStorage.getItem('jwtToken');
+  console.log("AuthToken:", authToken); 
+
+  if (!authToken) {
+    alert("You need to login to add a product to the cart.");
+    window.location.href = "/account"; // Redirect to account page
+    return;
+  }
+  const tokenParts = authToken.split('.');
+      const payload = JSON.parse(atob(tokenParts[1]));
+    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+    if (payload.exp < currentTime) {
+      // Token has expired, remove it from local storage
+      localStorage.removeItem('jwtToken');
+      // Redirect to login page or perform any other necessary action
+      alert("Your session has expired. Please log in again.");
+      window.location.href = "/account";
+      return;
+    }
+  
+
+  if (selectedQuantity <= availableQuantity) {
+    const cartIcon = document.getElementById("cartIcon");
+    const currentCount = parseInt(cartIcon.innerText) || 0;
+    cartIcon.innerText = currentCount + selectedQuantity;
+
+    const requestData = {
+      items: [{ 
+        productId: productId, 
+        quantity: selectedQuantity 
+      }]
+    };
+
+    try {
+      const response = await fetch("https://localhost:7114/AddCartItem", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify(requestData)
+      });
+      if (response.ok) {
+        console.log("Product added to cart successfully.");
+        alert("Product added to cart successfully!");
+      } else {
+        throw new Error('Error adding product to cart.');
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error.message);
+      alert("Error adding product to cart. Please try again later.");
+    }
+  } else {
+    alert("Please select a quantity less than or equal to the available quantity.");
+  }
+}
+
+
+    function generateQuantityOptions(availableQuantity) {
+      let options = '';
+      for (let i = 1; i <= availableQuantity; i++) {
+        options += `<option value="${i}">${i}</option>`;
+      }
+      return options;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      fetchProductDetails();
+    });
+  </script>
+
+</body>
+
+</html>

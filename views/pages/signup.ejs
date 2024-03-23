@@ -150,6 +150,8 @@
     // Function to fetch roles and populate dropdown on page load
     document.addEventListener("DOMContentLoaded", function () {
       fetchRolesAndPopulateDropdown();
+      const dropdown = document.getElementById('roleId');
+      dropdown.addEventListener('change', updateRoleLabel);
     });
 
     async function fetchRolesAndPopulateDropdown() {
@@ -237,7 +239,7 @@ function populateRolesDropdown(roles) {
             roleId: roleId
         };
 
-        // Example: Send data to the server (replace with your actual endpoint)
+        
         const response = await fetch('https://localhost:7114/AddUser', {
             method: 'POST',
             headers: {

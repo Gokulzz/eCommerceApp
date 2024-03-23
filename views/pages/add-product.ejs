@@ -6,17 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            background-color: #252525;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #007bff;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: none;
+        }
+
+        #categoryLabel {
+            font-style: italic;
+            color: #cccccc;
+        }
+
+        #successMessage {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:focus {
+            box-shadow: none;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:active {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:active:focus {
+            box-shadow: none;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="container mt-5">
         <h2>Add Product</h2>
-        <!-- Your add product form goes here -->
-        <!--Make sure the value in the name field is same as the field in productDTO in the backend
-        otherwise you can use the option [From Body] in the backend too, but since we are passing file type from the frontend
-    so, using [frombody] will expect it in json format which needs to be deserialized before mapping to the required field
-     so better not use frombody-->
+
         <form id="addProductForm" action="/admin/add-product" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="productName">Product Name</label>
@@ -35,7 +104,6 @@
             <div class="form-group">
                 <label for="quantity">Quantity:</label>
                 <input type="number" class="form-control" id="Quantity" name="Quantity" required>
-             
             </div>
             <div class="form-group">
                 <label for="productDescription">Product Description</label>
@@ -49,10 +117,9 @@
                 <label for="fileData">Product Image</label>
                 <input type="file" class="form-control-file" id="fileData" name="fileData" required>
             </div>
-            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="submitForm()">Submit</button>
         </form>
 
-        <!-- Display success message -->
         <div id="successMessage" class="mt-3" style="display: none;">
             <div class="alert alert-success" role="alert">
                 Product added successfully!
@@ -69,6 +136,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
       fetchCategoriesAndPopulateDropdown();
+      const dropdown = document.getElementById('CategoryId');
+      dropdown.addEventListener('change', updateCategoryLabel);
     });
 
     async function fetchCategoriesAndPopulateDropdown() {
@@ -125,10 +194,10 @@ function populateRolesDropdown(categories) {
     // Function to update role label
     function updateCategoryLabel() {
       var dropdown = document.getElementById('CategoryId');
-      var roleLabel = document.getElementById('CategoryLabel');
+      var categoryLabel = document.getElementById('categoryLabel');
 
       if (dropdown.selectedIndex !== -1) {
-        // If an option is selected, update the role label
+        // If an option is selected, update the category label
         categoryLabel.textContent = dropdown.options[dropdown.selectedIndex].text;
       }
     }
