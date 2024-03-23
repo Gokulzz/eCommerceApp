@@ -8,6 +8,7 @@ namespace eCommerceApp.BLL.DTO
 {
    public class RoleDTO
     {
+        public Guid roleId { get; set; }    
         public string Role_Name { get; set; }
         public string Role_Description { get; set; }
     }

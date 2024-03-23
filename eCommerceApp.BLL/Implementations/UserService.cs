@@ -42,33 +42,42 @@ namespace eCommerceApp.BLL.Implementations
             var find_id = await unitofWork.UserRepository.GetAsync(id);
             return new ApiResponse(200, $"User of {id} displayed successfully", find_id);
         }
+        public async Task<ApiResponse> GetUserByEmail(string email)
+        {
+            var user = await unitofWork.FindUserByEmail(email);
+            return new ApiResponse(200, "User displayed successfully", user);
+        }
         public async Task<ApiResponse> AddUser(UserDTO userDTO)
         {
             try
             {
-                var validate_user = validator.Validate(userDTO);
-                if (validate_user.IsValid)
-                {
-                    CreatePasswordHash(userDTO.Password, out byte[] passwordHash, out byte[] passwordsalt);
-                    var add_User = new User
+                
+              
+                    var validate_user = validator.Validate(userDTO);
+                    if (validate_user.IsValid)
                     {
-                        UserName = userDTO.userName,
-                        Email = userDTO.Email,
-                        PasswordHash = passwordHash,
-                        PasswordSalt = passwordsalt,
-                        Address= userDTO.Address,
-                        VerificationToken = GenerateToken(),
-                        roleId = userDTO.roleId
 
-                    };
-                    await unitofWork.UserRepository.PostAsync(add_User);
-                    await unitofWork.Save();
-                    return new ApiResponse(200, "Need to enter the verification token send to your email to complete the process of Registration", add_User.VerificationToken);
-                }
-                else
-                {
-                    throw new BadRequestException(validate_user.ToString());
-                }
+                        CreatePasswordHash(userDTO.Password, out byte[] passwordHash, out byte[] passwordsalt);
+                        var add_User = new User
+                        {
+                            UserName = userDTO.userName,
+                            Email = userDTO.Email,
+                            PasswordHash = passwordHash,
+                            PasswordSalt = passwordsalt,
+                            Address = userDTO.Address,
+                            VerificationToken = GenerateToken(),
+                            roleId = userDTO.roleId
+
+                        };
+                        await unitofWork.UserRepository.PostAsync(add_User);
+                        await unitofWork.Save();
+                        return new ApiResponse(200, "Need to enter the verification token send to your email to complete the process of Registration", add_User.VerificationToken);
+                    }
+                    else
+                    {
+                        throw new BadRequestException(validate_user.ToString());
+                    }
+                
             }
             catch (Exception ex)
             {

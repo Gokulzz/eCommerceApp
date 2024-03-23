@@ -23,7 +23,6 @@ namespace eCommerceApp.BLL.Implementations
             this.mapper = mapper;
             this.productService = productService;
             this.userService= userService;
-            
         }
         public async Task<ApiResponse> GetAllOrderDetails()
         {

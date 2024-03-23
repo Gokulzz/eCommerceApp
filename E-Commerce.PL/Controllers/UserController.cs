@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace E_Commerce.PL.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize]
+    
     public class UserController : Controller
     {
         public IUserService UserService { get; set; }
@@ -21,6 +22,13 @@ namespace E_Commerce.PL.Controllers
             var getUser = await UserService.GetUser(id);
             return getUser;
         }
+        [HttpGet("GetByEmail")]
+        public async Task<ApiResponse> GetByEmail(string email)
+        {
+            var user= await UserService.GetUserByEmail(email);
+            return user;
+        }
+
         [HttpGet("GetAllUser")]
         public async Task<ApiResponse> GetAllUser()
         {
@@ -28,7 +36,7 @@ namespace E_Commerce.PL.Controllers
             return getUsers;
         }
         [HttpPost("AddUser")]
-        public async Task<ApiResponse> AddUsers(UserDTO user)
+        public async Task<ApiResponse> AddUser([FromBody] UserDTO user)
         {
             var addUser = await UserService.AddUser(user);
             return addUser;

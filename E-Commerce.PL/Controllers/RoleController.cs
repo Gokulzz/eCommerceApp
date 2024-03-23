@@ -20,7 +20,7 @@ namespace E_Commerce.PL.Controllers
             return getRole;
         }
         [HttpGet("GetAllRoles")]
-        public async Task<ApiResponse> GetAllUser()
+        public async Task<ApiResponse> GetAllRoles()
         {
             var getRoles = await service.GetAllRole();
             return getRoles;

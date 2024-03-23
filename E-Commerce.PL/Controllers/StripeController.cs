@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.PL.Controllers
 {
-    
+
     [Route("stripe")]
     public class StripeController : Controller
     {

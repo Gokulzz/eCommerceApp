@@ -9,5 +9,6 @@ namespace eCommerceApp.DAL.Repository
 {
     public interface IPaymentRepository : IGenericRepository<Payment>
     {
+        public Task<string> CheckPaymentStatus(Guid orderId);
     }
 }

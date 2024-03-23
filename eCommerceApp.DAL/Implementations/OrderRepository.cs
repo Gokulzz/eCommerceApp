@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using eCommerceApp.DAL.Data;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCommerceApp.DAL.Implementations
 {
@@ -14,6 +15,19 @@ namespace eCommerceApp.DAL.Implementations
         public OrderRepository(DataContext dataContext) : base(dataContext)
         {
 
+        }
+        public async Task<double> GetOrderAmount(Guid id)
+        {
+            var amount= await dataContext.Orders.FindAsync(id);
+            return amount.totalAmount;
+        }
+        public async Task<Guid> GetOrderId(Guid userId)
+        {
+            var get_orders = await dataContext.Orders.ToListAsync();
+            var getId = from orders in get_orders
+                        where orders.userId == userId
+                        select orders.orderId;
+            return getId.FirstOrDefault();
         }
     }
 }

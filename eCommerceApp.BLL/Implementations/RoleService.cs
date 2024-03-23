@@ -25,8 +25,10 @@ namespace eCommerceApp.BLL.Implementations
         {
             try
             {
-                var get_Users = await unitofWork.RoleRepository.GetAllAsync();
-                return new ApiResponse(200, "Roles displayed successfully", get_Users);
+                var get_Roles = await unitofWork.RoleRepository.GetAllAsync();
+                //we are mapping each propertu of role to roleDTO 
+                var map_Roles = mapper.Map<List<RoleDTO>>(get_Roles);
+                return new ApiResponse(200, "Roles displayed successfully", map_Roles);
             }
             catch (Exception ex)
             {
@@ -69,9 +71,10 @@ namespace eCommerceApp.BLL.Implementations
                 {
                     throw new NotFoundException($"role of this {id} could not be found");
                 }
-                find_Role.Role_Name = roleDTO.Role_Name;
-                find_Role.Role_Description = roleDTO.Role_Description;
-                await unitofWork.RoleRepository.UpdateAsync(find_Role);
+                //find_Role.Role_Name = roleDTO.Role_Name;
+                //find_Role.Role_Description = roleDTO.Role_Description;
+                var mapRole = mapper.Map<Role>(roleDTO);
+                await unitofWork.RoleRepository.UpdateAsync(id, mapRole );
                 await unitofWork.Save();
                 return new ApiResponse(200, $"Role of {id} updated successfully", find_Role);
             }

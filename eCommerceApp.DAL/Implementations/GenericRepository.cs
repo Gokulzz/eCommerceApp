@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using eCommerceApp.DAL.Data;
 using eCommerceApp.DAL.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace eCommerceApp.DAL.Implementations
 {
@@ -41,11 +42,20 @@ namespace eCommerceApp.DAL.Implementations
 
            
         }
-        public async Task<T> UpdateAsync(T entity)
+        public async Task<T> UpdateAsync(Guid id, T entity)
         {
-            var update_Data = dataContext.Set<T>().Update(entity);
-            return entity;
+            var existingEntity = await dataContext.Set<T>().FindAsync(id);
+            if (existingEntity == null)
+            {
+                throw new Exception();
+            }
+
+            // Update the existing entity with the values from the provided entity
+            dataContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+
+            return existingEntity;
         }
+
         public async Task<T> DeleteAsync(Guid id)
         {
             var find_Data = await dataContext.Set<T>().FindAsync(id);
