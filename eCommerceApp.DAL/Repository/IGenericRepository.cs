@@ -13,7 +13,7 @@ namespace eCommerceApp.DAL.Repository
         Task<T> PostAsync(T entity);   
         Task<List<T>> PostMultiple(List<T> entities);   
         Task<T> DeleteAsync(Guid id);  
-        Task<T> UpdateAsync(T entity);
+        Task<T> UpdateAsync(Guid id, T entity);
         Task<List<T>> DeleteAllAsync();
 
     }

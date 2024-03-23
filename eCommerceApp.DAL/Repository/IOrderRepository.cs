@@ -10,5 +10,9 @@ namespace eCommerceApp.DAL.Repository
     public interface IOrderRepository : IGenericRepository<Order>
     {
         public  Task<double> GetOrderAmount(Guid id);
+        public Task<Guid> GetOrderId(Guid id);
+        
     }
+    
+    
 }

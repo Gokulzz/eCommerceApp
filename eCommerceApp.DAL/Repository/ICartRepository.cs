@@ -9,5 +9,6 @@ namespace eCommerceApp.DAL.Repository
 {
     public interface ICartRepository : IGenericRepository<Cart>
     {
+        public Task<Guid> GetCartId(Guid userId);
     }
 }
