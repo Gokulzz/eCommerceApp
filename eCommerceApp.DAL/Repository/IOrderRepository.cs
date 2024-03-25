@@ -11,6 +11,8 @@ namespace eCommerceApp.DAL.Repository
     {
         public  Task<double> GetOrderAmount(Guid id);
         public Task<Guid> GetOrderId(Guid id);
+        public Task<IEnumerable<Order>> GetOrderandOrderDetails(Guid orderId);
+       
         
     }
     

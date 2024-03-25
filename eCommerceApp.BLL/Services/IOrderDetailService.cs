@@ -11,6 +11,7 @@ namespace eCommerceApp.BLL.Services
     {
         public Task<ApiResponse> GetAllOrderDetails();
         public Task<ApiResponse> GetOrderDetails(Guid orderId);
+        public Task<ApiResponse> GetOrderDetailCount(); 
         public Task<ApiResponse> AddOrderDetails(OrderDetailDTO DTO);
         public Task<ApiResponse> UpdateOrderDetails(OrderDetailDTO DTO);
         public Task<ApiResponse> DeleteOrderDetails(Guid orderId);

@@ -29,5 +29,19 @@ namespace eCommerceApp.DAL.Implementations
                         select orders.orderId;
             return getId.FirstOrDefault();
         }
+        public async Task<IEnumerable<Order>> GetOrderandOrderDetails(Guid orderId)
+        {
+            var get_orders = await dataContext.Orders.Include(x => x.orderDetails).ThenInclude(x=>x.product).ToListAsync();
+
+            var orderList = from orders in get_orders
+                            where orders.orderId == orderId
+                            && orders.Status == "Hold"
+                            select orders;
+            return orderList;
+
+
+
+        }
+        
     }
 }

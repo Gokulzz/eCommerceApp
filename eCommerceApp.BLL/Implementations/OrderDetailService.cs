@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using eCommerceApp.BLL.DTO;
+using eCommerceApp.BLL.Exceptions;
 using eCommerceApp.BLL.Services;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
+using Microsoft.Identity.Client;
 
 namespace eCommerceApp.BLL.Implementations
 {
@@ -26,7 +28,11 @@ namespace eCommerceApp.BLL.Implementations
         }
         public async Task<ApiResponse> GetAllOrderDetails()
         {
-            var orderdetails = await unitofWork.OrderdetailRepository.GetAllAsync();
+            var orderdetails = await unitofWork.OrderdetailRepository.GetOrderdetailswithProduct();
+            if(orderdetails == null)
+            {
+                throw new NotFoundException("Order details not found");
+            }
             return new ApiResponse(200, "All the ORDERS returned successfully", orderdetails);
         }
         public async Task<ApiResponse> GetOrderDetails(Guid Id)
@@ -34,6 +40,19 @@ namespace eCommerceApp.BLL.Implementations
             var order = await unitofWork.OrderdetailRepository.GetAsync(Id);
             return new ApiResponse(200, $"Order of {Id} returned successfuly", order);
 
+        }
+        public async Task<ApiResponse> GetOrderDetailCount()
+        {
+            var userId = userService.GetCurrentId();
+            var orderId = await unitofWork.OrderRepository.GetOrderId(userId);
+            if(orderId== Guid.Empty)
+            {
+                throw new NotFoundException("Orders not found");
+            }
+            var get_Count = await unitofWork.OrderdetailRepository.GetOrderdetailcount(orderId);
+            return new ApiResponse(200, $"Order count returned successfully", get_Count);
+            
+            
         }
         public async Task<ApiResponse> AddOrderDetails(OrderDetailDTO orderDetailsDTO )
         {

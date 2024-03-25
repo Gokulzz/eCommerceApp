@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using eCommerceApp.BLL.DTO;
+using eCommerceApp.BLL.Exceptions;
 using eCommerceApp.BLL.Services;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
@@ -16,17 +17,28 @@ namespace eCommerceApp.BLL.Implementations
     {
         //I need to add the feature of cancelling the order.
         private readonly IUnitofWork unitofWork;
+        private readonly IUserService userService;
         public IMapper mapper;
-        public OrderService(IUnitofWork unitofWork, IMapper mapper)
+        public OrderService(IUnitofWork unitofWork, IMapper mapper, IUserService userService)
         {
             this.unitofWork = unitofWork;
             this.mapper = mapper;
+            this.userService = userService;
         }
         public async Task<ApiResponse> GetAllOrders()
         {
-            var all_Orders = await unitofWork.OrderRepository.GetAllAsync();
-            return new ApiResponse(200, "All the ORDERS returned successfully", all_Orders);
+            var userId= userService.GetCurrentId();
+            var orderId = await unitofWork.OrderRepository.GetOrderId(userId);
+            if (orderId == Guid.Empty)
+            {
+                throw new NotFoundException("Orders not found");
+            }
+            var get_orders = await unitofWork.OrderRepository.GetOrderandOrderDetails(orderId);
+           
+            return new ApiResponse(200, "Order displayed successfully", get_orders);
+
         }
+        
         public async Task<ApiResponse> GetOrder(Guid Id)
         {
             var order = await unitofWork.OrderRepository.GetAsync(Id);
