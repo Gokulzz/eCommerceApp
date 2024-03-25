@@ -27,6 +27,13 @@ namespace E_Commerce.PL.Controllers
             var allOrder = await orderDetail.GetAllOrderDetails();
             return allOrder;
         }
+        [HttpGet("GetOrderCount")]
+        public async Task<ApiResponse> GetOrderCount()
+        {
+            var getCount = await orderDetail.GetOrderDetailCount();
+            return getCount;
+        }
+
         [HttpPost("AddOrderDetail")]
         public async Task<ApiResponse> AddOrderDetail(OrderDetailDTO order)
         {

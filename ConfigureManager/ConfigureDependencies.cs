@@ -39,6 +39,7 @@ namespace ConfigureManager
             services.AddScoped<IProductService, eCommerceApp.BLL.Implementations.ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();  
             services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderService, OrderService>();  
             services.AddScoped<ICartItemService, CartItemService>();
             services.AddScoped<IStripeService, StripeService>();
             services.AddScoped<TokenService>();

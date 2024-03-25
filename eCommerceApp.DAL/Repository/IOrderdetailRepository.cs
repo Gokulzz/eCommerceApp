@@ -9,5 +9,7 @@ namespace eCommerceApp.DAL.Repository
 {
     public interface IOrderdetailRepository : IGenericRepository<Orderdetails>
     {
+        public Task<List<Orderdetails>> GetOrderdetailswithProduct();
+        public Task<int> GetOrderdetailcount(Guid orderId);
     }
 }
