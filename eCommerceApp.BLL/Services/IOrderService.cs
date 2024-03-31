@@ -10,7 +10,7 @@ namespace eCommerceApp.BLL.Services
     public interface IOrderService
     {
         public Task<ApiResponse> GetAllOrders();
-        public Task<ApiResponse> GetOrder(Guid orderId);
+        public Task<ApiResponse> GetOrder();
         public Task<ApiResponse> AddOrder(OrderDTO order);
         public Task<ApiResponse> UpdateOrder(OrderDTO order);
         public Task<ApiResponse> DeleteOrder(Guid orderId);

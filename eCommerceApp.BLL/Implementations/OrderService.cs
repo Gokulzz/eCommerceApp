@@ -39,10 +39,17 @@ namespace eCommerceApp.BLL.Implementations
 
         }
         
-        public async Task<ApiResponse> GetOrder(Guid Id)
+        public async Task<ApiResponse> GetOrder()
         {
-            var order = await unitofWork.OrderRepository.GetAsync(Id);
-            return new ApiResponse(200, $"Order of {Id} returned successfuly", order);
+            var userId = userService.GetCurrentId();
+            var orderId = await unitofWork.OrderRepository.GetOrderId(userId);
+            if (orderId == Guid.Empty)
+            {
+                throw new NotFoundException("Orders not found");
+            }
+            var get_orders= await unitofWork.OrderRepository.GetAsync(orderId); 
+            var map_order= mapper.Map<CheckOutOrderDTO>(get_orders);
+            return new ApiResponse(200, "order returned successfully", map_order);
 
         }
         public async Task<ApiResponse> AddOrder(OrderDTO orderDTO)

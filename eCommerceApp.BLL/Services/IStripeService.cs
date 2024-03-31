@@ -11,7 +11,7 @@ namespace eCommerceApp.BLL.Services
     public interface IStripeService
     {
         Task<CustomerResource> CreateCustomer(CreateCustomerResource resource, CancellationToken cancellationToken);
-        Task<ChargeResource> CreateCharge(CreateChargeResource resource, PaymentDTO paymentDTO, CancellationToken cancellationToken);
+        Task<ChargeResource> CreateCharge(CreateChargeResource resource, CancellationToken cancellationToken);
 
     }
 }

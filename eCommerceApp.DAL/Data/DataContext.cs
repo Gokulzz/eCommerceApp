@@ -28,6 +28,7 @@ namespace eCommerceApp.DAL.Data
             modelBuilder.Entity<CartItem>().HasKey(x => x.CartItemID);
             modelBuilder.Entity<Category>().HasKey(x => x.categoryId);
             modelBuilder.Entity<Order>().HasKey(x => x.orderId);
+            modelBuilder.Entity<ShippingAddress>().HasKey(x => x.addressId);
             modelBuilder.Entity<Orderdetails>().HasKey(x => x.orderDetailId);
             modelBuilder.Entity<Payment>().HasKey(x => x.paymentId);
             modelBuilder.Entity<CustomerPaymentMethod>().HasKey(x => x.paymentMethodId);
@@ -62,18 +63,21 @@ namespace eCommerceApp.DAL.Data
                  .WithMany(x=>x.CartItems)
                  .HasForeignKey(x => x.ProductID)
                    .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Cart>()
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.shippingAddresses)
+                .WithMany(x => x.Users)
+                .UsingEntity<UserShippingAddress>();
+             modelBuilder.Entity<Cart>()
                 .HasOne(x => x.user).WithOne(x => x.cart)
                 .HasForeignKey<Cart>(x => x.userId);
             modelBuilder.Entity<Product>()
-
                .HasMany(x => x.Categories)
                .WithMany(x => x.products)
                .UsingEntity<ProductCategory>();
             modelBuilder.Entity<Payment>()
                 .HasOne(x => x.order).WithOne(x => x.payment)
                 .HasForeignKey<Payment>(x => x.orderId);
+           
         }
         public DbSet<Product> Products { get; set;}
         public DbSet<User> Users { get; set;}   
@@ -85,5 +89,7 @@ namespace eCommerceApp.DAL.Data
         public DbSet<Cart> Carts { get; set; }  
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<ProductCategory> CategoryProduct { get; set; } 
+        public DbSet<ShippingAddress> ShippingAddresses { get; set; }   
+        public DbSet<UserShippingAddress> ShippingAddressUser{ get; set; }
     }
 }
