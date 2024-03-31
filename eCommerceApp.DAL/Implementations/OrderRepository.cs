@@ -19,13 +19,14 @@ namespace eCommerceApp.DAL.Implementations
         public async Task<double> GetOrderAmount(Guid id)
         {
             var amount= await dataContext.Orders.FindAsync(id);
-            return amount.totalAmount;
+            return amount.grandTotal;
         }
         public async Task<Guid> GetOrderId(Guid userId)
         {
             var get_orders = await dataContext.Orders.ToListAsync();
             var getId = from orders in get_orders
                         where orders.userId == userId
+                        && orders.Status=="Hold"
                         select orders.orderId;
             return getId.FirstOrDefault();
         }
@@ -42,6 +43,7 @@ namespace eCommerceApp.DAL.Implementations
 
 
         }
+       
         
     }
 }

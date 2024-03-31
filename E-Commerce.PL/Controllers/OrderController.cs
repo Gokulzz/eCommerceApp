@@ -20,5 +20,11 @@ namespace E_Commerce.PL.Controllers
             var orders= await orderService.GetAllOrders();
             return orders;
         }
+        [HttpGet("GetOrder")]
+        public async Task<ApiResponse> GetOrder()
+        {
+            var order = await orderService.GetOrder();
+            return order;
+        }
     }
 }

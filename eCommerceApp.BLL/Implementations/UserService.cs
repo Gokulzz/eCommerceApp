@@ -64,7 +64,6 @@ namespace eCommerceApp.BLL.Implementations
                             Email = userDTO.Email,
                             PasswordHash = passwordHash,
                             PasswordSalt = passwordsalt,
-                            Address = userDTO.Address,
                             VerificationToken = GenerateToken(),
                             roleId = userDTO.roleId
 

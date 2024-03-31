@@ -18,8 +18,11 @@ namespace eCommerceApp.BLL
                .ForMember(dest => dest.Role_Name, opt => opt.MapFrom(src => src.Role_Name))
                .ForMember(dest => dest.Role_Description, opt => opt.MapFrom(src => src.Role_Description));
             CreateMap<RoleDTO, Role>();
-           
-            
+            CreateMap<ShippingAddressDTO, ShippingAddress>();
+            CreateMap<Order, CheckOutOrderDTO>()
+                .ForMember(dest => dest.orderId, opt => opt.MapFrom(src => src.orderId))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.totalAmount))
+                .ForMember(dest => dest.GrandTotal, opt => opt.MapFrom(src => src.grandTotal.ToString("0.00")));
             CreateMap<UserDTO, User>();
             CreateMap<Category, CategoryDTO>()
                 .ForMember(dest => dest.categoryId, opt => opt.MapFrom(src => src.categoryId))

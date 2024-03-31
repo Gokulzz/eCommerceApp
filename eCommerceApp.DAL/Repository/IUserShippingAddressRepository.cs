@@ -7,8 +7,7 @@ using eCommerceApp.DAL.Models;
 
 namespace eCommerceApp.DAL.Repository
 {
-    public interface IPaymentMethodRepository : IGenericRepository<CustomerPaymentMethod>
+    public interface IUserShippingAddressRepository : IGenericRepository<UserShippingAddress>
     {
-        public Task<Guid> GetPaymentMethodId(Guid id);
     }
 }

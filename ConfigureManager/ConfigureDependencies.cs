@@ -32,7 +32,9 @@ namespace ConfigureManager
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();    
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<IUserShippingAddressRepository, UserShippingAddressRepository>();
             services.AddScoped<IUnitofWork, UnitofWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
@@ -40,6 +42,7 @@ namespace ConfigureManager
             services.AddScoped<ICategoryService, CategoryService>();  
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderService, OrderService>();  
+            services.AddScoped<IShippingAddressService, ShippingAddressService>();
             services.AddScoped<ICartItemService, CartItemService>();
             services.AddScoped<IStripeService, StripeService>();
             services.AddScoped<TokenService>();

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.PL.Controllers
 {
+    [Authorize]
 
     [Route("stripe")]
     public class StripeController : Controller
@@ -24,9 +25,9 @@ namespace E_Commerce.PL.Controllers
         }
 
         [HttpPost("Charge")]
-        public async Task<ActionResult<ChargeResource>> CreateCharge([FromBody] CreateChargeResource resource,PaymentDTO paymentDTO, CancellationToken cancellationToken)
+        public async Task<ActionResult<ChargeResource>> CreateCharge([FromBody] CreateChargeResource resource,CancellationToken cancellationToken)
         {
-            var response = await stripeService.CreateCharge(resource, paymentDTO, cancellationToken);
+            var response = await stripeService.CreateCharge(resource,cancellationToken);
             return Ok(response);
         }
     }

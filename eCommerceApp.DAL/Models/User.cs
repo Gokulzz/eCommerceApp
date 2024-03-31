@@ -22,13 +22,12 @@ namespace eCommerceApp.DAL.Models
         //User can order many products
         public Cart cart { get; set; }
         public Guid cartId { get; set; }
-
-        public string Address { get; set; }
         public ICollection<Product> Products { get; set; }
         //A single user can have many orders
         public ICollection<Order> Orders { get; set; }
         //A single user can have multiple paymentMethods
         public ICollection<CustomerPaymentMethod> paymentmethods { get; set; }
+        public ICollection<ShippingAddress> shippingAddresses { get; set; }
         public DateTime? VerifiedAt { get; set; }
         public string? RoleName { get; set; }   
         

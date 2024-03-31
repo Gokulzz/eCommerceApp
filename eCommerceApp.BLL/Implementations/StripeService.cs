@@ -94,7 +94,7 @@ namespace eCommerceApp.BLL.Implementations
            
         }
 
-        public async Task<ChargeResource> CreateCharge(CreateChargeResource resource,PaymentDTO paymentDTO, CancellationToken cancellationToken)
+        public async Task<ChargeResource> CreateCharge(CreateChargeResource resource, CancellationToken cancellationToken)
         {
             if (resource == null)
             {
@@ -103,7 +103,12 @@ namespace eCommerceApp.BLL.Implementations
             }
             //we are converting the amount to smallest currency  which helps avoid rounding errors and ensures that
             //the calculations are performed with integer values.
-            long payment_Amount = (long)Math.Round((paymentDTO.amount * 100));
+            var userId= _userService.GetCurrentId();
+            var orderId = await _unitofWork.OrderRepository.GetOrderId(userId);
+            var grandTotal = await _unitofWork.OrderRepository.GetOrderAmount(orderId);
+            var paymentMethodId= await _unitofWork.PaymentMethodRepository.GetPaymentMethodId(userId);
+            var order= await _unitofWork.OrderRepository.GetAsync(orderId);
+            long payment_Amount = (long)Math.Round((grandTotal * 100));
             var chargeOptions = new ChargeCreateOptions
             {
                 Currency = resource.Currency,
@@ -113,16 +118,17 @@ namespace eCommerceApp.BLL.Implementations
                 Description = resource.Description
             };
             var charge = await _chargeService.CreateAsync(chargeOptions, null, cancellationToken);
-            var total_Amount = await _orderRepository.GetOrderAmount(paymentDTO.orderId);
             var payment = new Payment()
             {
-                Amount = paymentDTO.amount,
+                Amount = grandTotal,
                 paymentDate = DateTime.Now,
-                Status =(total_Amount==paymentDTO.amount)?"Paid": "Partially Paid",
-                paymentMethodId = paymentDTO.paymentMethodId,
-                orderId = paymentDTO.orderId
+                Status ="Paid",
+                paymentMethodId = paymentMethodId,
+                orderId = orderId
             };
             await _unitofWork.PaymentRepository.PostAsync(payment);
+            order.Status = "Placed";
+            await _unitofWork.OrderRepository.UpdateAsync(orderId, order);
             await _unitofWork.Save();
 
                 return new ChargeResource(

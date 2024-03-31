@@ -25,6 +25,8 @@ namespace eCommerceApp.DAL.Implementations
         public IPaymentRepository PaymentRepository { get; }
         public IPaymentMethodRepository PaymentMethodRepository { get; }
         public IProductCategoryRepository ProductCategoryRepository { get; }
+        public IShippingAddressRepository ShippingAddressRepository { get; }
+        public IUserShippingAddressRepository UserShippingAddressRepository { get; }    
         public UnitofWork(DataContext dataContext)
         {
             this.dataContext = dataContext; 
@@ -39,6 +41,8 @@ namespace eCommerceApp.DAL.Implementations
             PaymentRepository= new PaymentRepository(dataContext);  
             PaymentMethodRepository= new PaymentMethodRepository(dataContext);
             ProductCategoryRepository= new ProductCategoryRepository(dataContext);
+            ShippingAddressRepository= new ShippingAddressRepository(dataContext);  
+            UserShippingAddressRepository= new UserShippingAddressRepository(dataContext);  
             
         }
         public async Task Save()
