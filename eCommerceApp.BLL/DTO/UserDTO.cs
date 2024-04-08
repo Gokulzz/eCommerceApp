@@ -12,6 +12,6 @@ namespace eCommerceApp.BLL.DTO
         public string Password { get; set; }
         public string ConfirmPassword { get; set; } 
         public string userName { get; set; }    
-        public Guid roleId { get; set; }        
+        //public Guid roleId { get; set; }        
     }
 }

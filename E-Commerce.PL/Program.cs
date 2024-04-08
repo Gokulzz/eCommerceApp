@@ -1,7 +1,9 @@
 using System.Security.Claims;
 using System.Text;
 using ConfigureManager;
+using eCommerceApp.BLL.DTO;
 using eCommerceApp.DAL.Data;
+using eCommerceApp.DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,8 +26,13 @@ try
     builder.Logging.ClearProviders();
     builder.Logging.AddSerilog(logger);
     logger.Information("App starting");
+    var emailConfig = builder.Configuration
+         .GetSection("EmailConfiguration")
+         .Get<EmailConfigurationDTO>();
+    builder.Services.AddSingleton(emailConfig);
 
     // Add services to the container.
+
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace E_Commerce.PL.Controllers
 {
-    [Authorize]
+    //[Authorize]
     
     public class UserController : Controller
     {
@@ -55,7 +55,7 @@ namespace E_Commerce.PL.Controllers
         }
        
         [HttpPost("VerifyUser")]
-        public async Task<ApiResponse> VerifyUser(Guid token)
+        public async Task<ApiResponse> VerifyUser([FromBody] Guid token)
         {
             var verify_User = await UserService.VerifyUser(token);
             return verify_User;

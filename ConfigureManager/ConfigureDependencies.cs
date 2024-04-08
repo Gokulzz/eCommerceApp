@@ -38,6 +38,7 @@ namespace ConfigureManager
             services.AddScoped<IUnitofWork, UnitofWork>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IEmailSenderService, EmailSenderService>();
             services.AddScoped<IProductService, eCommerceApp.BLL.Implementations.ProductService>();
             services.AddScoped<ICategoryService, CategoryService>();  
             services.AddScoped<IOrderDetailService, OrderDetailService>();
@@ -48,6 +49,7 @@ namespace ConfigureManager
             services.AddScoped<TokenService>();
             services.AddScoped<CustomerService>();
             services.AddScoped<ChargeService>();
+            
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
