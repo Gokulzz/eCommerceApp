@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,12 +25,14 @@ namespace eCommerceApp.BLL.Implementations
         private readonly IValidator<UserDTO> validator;
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor contextAccessor;
-        public UserService(IUnitofWork unitofWork, IValidator<UserDTO> validator, IConfiguration configuration, IHttpContextAccessor contextAccessor)
+        private readonly IEmailSenderService emailSenderService;
+        public UserService(IUnitofWork unitofWork, IValidator<UserDTO> validator, IConfiguration configuration, IHttpContextAccessor contextAccessor, IEmailSenderService emailSenderService)
         {
             this.unitofWork = unitofWork;
             this.validator = validator;
             this.configuration = configuration;
             this.contextAccessor = contextAccessor;
+            this.emailSenderService = emailSenderService;
         }
         public async Task<ApiResponse> GetAllUser()
         {
@@ -58,19 +61,21 @@ namespace eCommerceApp.BLL.Implementations
                     {
 
                         CreatePasswordHash(userDTO.Password, out byte[] passwordHash, out byte[] passwordsalt);
-                        var add_User = new User
-                        {
-                            UserName = userDTO.userName,
-                            Email = userDTO.Email,
-                            PasswordHash = passwordHash,
-                            PasswordSalt = passwordsalt,
-                            VerificationToken = GenerateToken(),
-                            roleId = userDTO.roleId
+                    var add_User = new User
+                    {
+                        UserName = userDTO.userName,
+                        Email = userDTO.Email,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordsalt,
+                        VerificationToken = GenerateToken(),
+                        roleId = Guid.Parse("8F904CAF-89F3-45DB-80DF-DCFDB5EB26D6")
 
-                        };
+                    };
                         await unitofWork.UserRepository.PostAsync(add_User);
                         await unitofWork.Save();
-                        return new ApiResponse(200, "Need to enter the verification token send to your email to complete the process of Registration", add_User.VerificationToken);
+                    var message = new MessageDTO(new string[] { userDTO.Email }, "Please enter this verification token to register", add_User.VerificationToken.ToString());
+                    await emailSenderService.SendEmailAsync(message);
+                    return new ApiResponse(200, "Need to enter the verification token send to your email to complete the process of Registration", add_User.VerificationToken);
                     }
                     else
                     {
@@ -98,12 +103,19 @@ namespace eCommerceApp.BLL.Implementations
         {
             throw new NotImplementedException();
         }
-        public async Task<ApiResponse> VerifyUser(Guid Token)
+        public async Task<ApiResponse> VerifyUser( Guid Token)
         {
-            var user = await unitofWork.UserRepository.VerifyUser(Token);
-            user.VerifiedAt = DateTime.Now;
-            await unitofWork.Save();
-            return new ApiResponse(200, "User Verified Successfully", user);
+          
+                var user = await unitofWork.UserRepository.VerifyUser(Token);
+                if(user==null)
+                {
+                throw new BadRequestException("Incorrect verfication token");
+                }
+                user.VerifiedAt = DateTime.Now;
+                await unitofWork.Save();
+                return new ApiResponse(200, "User Verified Successfully", user);
+            
+          
 
         }
         public async Task<ApiResponse> LoginUser(UserLoginDTO userLoginDTO)

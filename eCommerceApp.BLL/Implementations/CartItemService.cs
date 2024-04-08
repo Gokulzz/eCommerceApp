@@ -8,10 +8,12 @@ using eCommerceApp.BLL.Services;
 using eCommerceApp.DAL.Implementations;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerceApp.BLL.Implementations
 {
+    [Authorize]
     public class CartItemService : ICartItemService
     {
         private readonly IUnitofWork unitofWork;
