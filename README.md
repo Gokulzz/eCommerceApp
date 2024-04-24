@@ -38,9 +38,7 @@ Administrators can efficiently manage customer orders, ensuring seamless process
 
 We integrate with leading payment gateways like Stripe to ensure secure transactions, providing peace of mind to our users.
 
-### Responsive Design
 
-Our application is meticulously designed to be responsive and accessible across various devices, ensuring a delightful user experience for all.
 
 ## Getting Started
 
