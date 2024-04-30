@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eCommerceApp.BLL", "eCommer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "E-Commerce.PL", "E-Commerce.PL\E-Commerce.PL.csproj", "{7EB90673-A767-4F5E-9E0F-F36D497B5D68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureManager", "ConfigureManager\ConfigureManager.csproj", "{ED3A2E87-A397-4047-BC4F-96CC2946F4DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigureManager", "ConfigureManager\ConfigureManager.csproj", "{ED3A2E87-A397-4047-BC4F-96CC2946F4DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

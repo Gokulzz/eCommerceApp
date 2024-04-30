@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using eCommerceApp.DAL.Data;
@@ -22,6 +23,12 @@ namespace eCommerceApp.DAL.Implementations
             var search_token = await dataContext.Users.Where(x => x.VerificationToken == token).FirstOrDefaultAsync();
             return search_token;
             
+        }
+        public async Task<string> GetEmail(Guid id)
+        {
+            var get_Email = await dataContext.Users.Where(x=>x.Equals(id)).FirstOrDefaultAsync();
+            return get_Email.Email;
+                    
         }
        
      }

@@ -26,5 +26,13 @@ namespace eCommerceApp.DAL.Implementations
             return get_Id.FirstOrDefault();
 
         }
+        public async Task<IEnumerable<CustomerPaymentMethod>> GetPaymentMethod(Guid id)
+        {
+            var paymentMethod= await dataContext.PaymentMethod.ToListAsync();
+            var get_paymentMethod= from p in paymentMethod
+                                   where p.userId == id
+                                   select p;
+            return get_paymentMethod;
+        } 
     }
 }

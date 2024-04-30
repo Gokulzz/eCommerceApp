@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace eCommerceApp.DAL.Models
@@ -18,7 +19,8 @@ namespace eCommerceApp.DAL.Models
         public Guid userId { get; set; }
         public User user { get; set; }
 
-        public string FilePath { get; set; }    
+        public string FilePath { get; set; }
+        
         public ICollection<CartItem> CartItems { get; set; }
         public ICollection<Category> Categories { get; set; }
 

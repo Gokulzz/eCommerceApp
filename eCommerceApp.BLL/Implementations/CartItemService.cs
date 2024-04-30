@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerceApp.BLL.Implementations
 {
-    [Authorize]
+   
     public class CartItemService : ICartItemService
     {
         private readonly IUnitofWork unitofWork;
@@ -39,6 +39,21 @@ namespace eCommerceApp.BLL.Implementations
             var get_allItem = await unitofWork.CartItemRepository.GetAllAsync();
             return new ApiResponse(200, "All the item returned successfully", get_allItem);
         }
+        public async Task<ApiResponse> GetCartItemCount()
+        {
+            
+                var userId = userService.GetCurrentId();
+                var cartId = await unitofWork.CartRepository.GetCartId(userId);
+                if (cartId == Guid.Empty)
+                {
+                    throw new NotFoundException("Orders not found");
+                }
+               var get_Count = await unitofWork.CartItemRepository.GetCartItemcount(cartId);
+                return new ApiResponse(200, $"Order count returned successfully", get_Count);
+
+
+            
+        }
 
         public async Task<ApiResponse> AddCartItem(CartItemDTO cartItem)
         {
@@ -47,26 +62,28 @@ namespace eCommerceApp.BLL.Implementations
             {
                 // Retrieve or generate cartId
                 var cartId = await unitofWork.CartRepository.GetCartId(userId);
+                var get_CartId = await unitofWork.CartRepository.GetAsync(cartId);
                 if (cartId == Guid.Empty)
                 {
                     cartId = Guid.NewGuid(); // Generate new cartId
                     var cart = await AddCart(userId, cartId);
                     await unitofWork.CartRepository.PostAsync(cart);
                 }
+                
 
                 // Retrieve or generate orderId
-                var orderId = await unitofWork.OrderRepository.GetOrderId(userId);
-                if (orderId == Guid.Empty)
-                {
-                    orderId = Guid.NewGuid(); // Generate new orderId
-                    var order = await AddOrder(userId, orderId, cartItem);
-                    await unitofWork.OrderRepository.PostAsync(order);
-                }
-                else
-                {
-                    var order= await UpdateCurrentOrder(orderId, cartItem);
-                    await unitofWork.OrderRepository.UpdateAsync(orderId, order);
-                }
+                //var orderId = await unitofWork.OrderRepository.GetOrderId(userId);
+                //if (orderId == Guid.Empty)
+                //{
+                //    orderId = Guid.NewGuid(); // Generate new orderId
+                //    var order = await AddOrder(userId, orderId, cartItem);
+                //    await unitofWork.OrderRepository.PostAsync(order);
+                //}
+                //else
+                //{
+                //    var order= await UpdateCurrentOrder(orderId, cartItem);
+                //    await unitofWork.OrderRepository.UpdateAsync(orderId, order);
+                //}
 
                 // Add cart items
                 foreach (var item in cartItem.items)
@@ -75,20 +92,21 @@ namespace eCommerceApp.BLL.Implementations
 
                     var cartItemEntity = new CartItem
                     {
+                        CartItemID= Guid.NewGuid(),
                         ProductID = item.productId,
                         CartID = cartId,
                         Quantity = item.quantity
                     };
 
-                    var orderItem = new Orderdetails
-                    {
-                        productId = item.productId,
-                        orderId = orderId,
-                        Quantity = item.quantity,
-                        subTotal = calculateTotal(item.quantity, find_price)
-                    };
+                    //var orderItem = new Orderdetails
+                    //{
+                    //    productId = item.productId,
+                    //    orderId = orderId,
+                    //    Quantity = item.quantity,
+                    //    subTotal = calculateTotal(item.quantity, find_price)
+                    //};
                     await unitofWork.CartItemRepository.PostAsync(cartItemEntity);
-                    await unitofWork.OrderdetailRepository.PostAsync(orderItem);
+                   // await unitofWork.OrderdetailRepository.PostAsync(orderItem);
                 }
 
                 await unitofWork.Save();
@@ -111,7 +129,8 @@ namespace eCommerceApp.BLL.Implementations
 
         public async Task<ApiResponse> DeleteCartItem(Guid id)
         {
-            var get_Item = await unitofWork.CartItemRepository.GetAsync(id);
+            var get_Item = await unitofWork.CartItemRepository.DeleteAsync(id);
+            await unitofWork.Save();
             return new ApiResponse(200, $"Item of {id} deleted successfully", get_Item);
         }
 
@@ -125,51 +144,16 @@ namespace eCommerceApp.BLL.Implementations
             var cart = new Cart
             {
                 userId = userId,
-                cartID = newcartId
+                cartID = newcartId,
+                cartCheckout= "No"
             };
             return cart;
           
         }
+      
 
-        public async Task<Order> AddOrder(Guid userId, Guid neworderId, CartItemDTO cartItem)
-        {
-            double totalAmount = 0;
-            foreach (var item in cartItem.items)
-            {
-                var find_price = await productService.GetProductprice(item.productId);
-                totalAmount += calculateTotal(item.quantity, find_price);
-            }
-
-            double grandTotal = totalAmount * 1.13;
-            var order = new Order
-            {
-                orderDate = DateTime.Now,
-                orderId = neworderId,
-                userId = userId,
-                Status = "Hold",
-                totalAmount = totalAmount,
-                grandTotal = grandTotal
-            };
-            return order;
-
-            
-        }
-        public async Task<Order> UpdateCurrentOrder(Guid orderId, CartItemDTO cartItem)
-        {
-            var order = await unitofWork.OrderRepository.GetAsync(orderId);
-            if (order != null)
-            {
-                foreach(var item in cartItem.items)
-                {
-                    var find_price = await productService.GetProductprice(item.productId);
-                    order.totalAmount+= calculateTotal(item.quantity, find_price);
-                    order.grandTotal = order.totalAmount * 1.13;
-                }
-
-
-            }
-            return order;
-        }
+       
+     
     }
     
 }

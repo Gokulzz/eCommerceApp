@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eCommerceApp.BLL.Services
 {
-    public interface IPaymentMethod
+    public interface IPaymentMethodService
     {
         public Task<ApiResponse> GetAllPaymentMethod();
         public Task<ApiResponse> AddPaymentMethod();

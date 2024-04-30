@@ -2,6 +2,7 @@
 using eCommerceApp.BLL;
 using eCommerceApp.BLL.DTO;
 using eCommerceApp.BLL.Services;
+using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,12 @@ namespace E_Commerce.PL.Controllers
             var get_allItem= await cartItemService.GetAllCartItem();
             return get_allItem;
         }
+        [HttpGet("GetCartItemCount")]
+        public async Task<ApiResponse> GetCartItemCount()
+        {
+            var getCount = await cartItemService.GetCartItemCount();
+            return getCount;
+        }
         [HttpPost("AddCartItem")]
         public async Task<ApiResponse> AddCartItem([FromBody] CartItemDTO itemDTO)
         {
@@ -41,11 +48,12 @@ namespace E_Commerce.PL.Controllers
             var update_item = await cartItemService.UpdateCartItem(itemDTO, id);
             return update_item;
         }
-        [HttpDelete("DeleteCartItem")]
+        [HttpDelete("DeleteCartItem/{id}")]
         public async Task<ApiResponse> DeleteCartItem(Guid id)
         {
-            var delete_Item= await cartItemService.DeleteCartItem(id);
+            var delete_Item = await cartItemService.DeleteCartItem(id);
             return delete_Item;
         }
+
     }
 }

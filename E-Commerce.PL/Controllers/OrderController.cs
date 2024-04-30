@@ -1,7 +1,9 @@
 ﻿using eCommerceApp.BLL;
+using eCommerceApp.BLL.DTO;
 using eCommerceApp.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace E_Commerce.PL.Controllers
 {
@@ -24,6 +26,12 @@ namespace E_Commerce.PL.Controllers
         public async Task<ApiResponse> GetOrder()
         {
             var order = await orderService.GetOrder();
+            return order;
+        }
+        [HttpPost("AddOrder")]
+        public async Task<ApiResponse> AddOrder()
+        {
+            var order= await orderService.AddOrder();
             return order;
         }
     }

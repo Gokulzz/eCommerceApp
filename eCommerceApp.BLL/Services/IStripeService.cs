@@ -12,6 +12,7 @@ namespace eCommerceApp.BLL.Services
     {
         Task<CustomerResource> CreateCustomer(CreateCustomerResource resource, CancellationToken cancellationToken);
         Task<ChargeResource> CreateCharge(CreateChargeResource resource, CancellationToken cancellationToken);
+       
 
     }
 }

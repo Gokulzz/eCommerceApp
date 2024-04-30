@@ -10,7 +10,8 @@ namespace eCommerceApp.DAL.Models
     public class CartItem
     {
         [Key]
-        public Guid CartItemID = Guid.NewGuid();
+        public Guid CartItemID { get; set; }    
+        
 
         // Foreign key to associate the cart item with a product
         public Guid ProductID { get; set; }

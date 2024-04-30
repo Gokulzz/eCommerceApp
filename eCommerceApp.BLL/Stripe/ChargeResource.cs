@@ -13,16 +13,15 @@ namespace eCommerceApp.BLL.Stripe
         public long Amount { get; set; }
         public string CustomerId { get; set; }
         public string ReceiptEmail { get; set; }
-        public string Description { get; set; }
+        //public string Description { get; set; }
 
-        public ChargeResource(string chargeid, string currency, long amount, string customerId, string receiptEmail, string description)
-        {
+        public ChargeResource(string chargeid, string currency, long amount, string customerId, string receiptEmail) { 
             ChargeId= chargeid;
             Currency = currency;
             Amount = amount;
             CustomerId = customerId;
             ReceiptEmail = receiptEmail;
-            Description = description;
+           
         }
 
         
