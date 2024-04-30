@@ -67,9 +67,9 @@ namespace eCommerceApp.DAL.Data
                 .HasMany(x => x.shippingAddresses)
                 .WithMany(x => x.Users)
                 .UsingEntity<UserShippingAddress>();
-             modelBuilder.Entity<Cart>()
-                .HasOne(x => x.user).WithOne(x => x.cart)
-                .HasForeignKey<Cart>(x => x.userId);
+            modelBuilder.Entity<Cart>()
+               .HasOne(x => x.user).WithMany(x => x.carts)
+               .HasForeignKey(x => x.userId);
             modelBuilder.Entity<Product>()
                .HasMany(x => x.Categories)
                .WithMany(x => x.products)

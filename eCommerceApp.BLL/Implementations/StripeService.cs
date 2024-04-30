@@ -14,7 +14,7 @@ using Stripe;
 
 namespace eCommerceApp.BLL.Implementations
 {
-    
+
     public class StripeService : IStripeService
     {
         private readonly TokenService _tokenService;
@@ -38,7 +38,7 @@ namespace eCommerceApp.BLL.Implementations
             _unitofWork = unitofWork;
             _userService = userService;
             _orderRepository = orderRepository;
-            
+
         }
 
         public async Task<CustomerResource> CreateCustomer(CreateCustomerResource resource, CancellationToken cancellationToken)
@@ -86,59 +86,65 @@ namespace eCommerceApp.BLL.Implementations
 
                 return new CustomerResource(customer.Id, customer.Email, customer.Name);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
-            
-           
+
+
         }
 
         public async Task<ChargeResource> CreateCharge(CreateChargeResource resource, CancellationToken cancellationToken)
         {
             if (resource == null)
             {
-               
+
                 throw new ArgumentNullException(nameof(resource));
             }
             //we are converting the amount to smallest currency  which helps avoid rounding errors and ensures that
             //the calculations are performed with integer values.
-            var userId= _userService.GetCurrentId();
+            var userId = _userService.GetCurrentId();
+            var getEmail = await _unitofWork.UserRepository.GetEmail(userId);
             var orderId = await _unitofWork.OrderRepository.GetOrderId(userId);
+            var cartId = await _unitofWork.CartRepository.GetCartId(userId);
             var grandTotal = await _unitofWork.OrderRepository.GetOrderAmount(orderId);
-            var paymentMethodId= await _unitofWork.PaymentMethodRepository.GetPaymentMethodId(userId);
-            var order= await _unitofWork.OrderRepository.GetAsync(orderId);
+            var paymentMethodId = await _unitofWork.PaymentMethodRepository.GetPaymentMethodId(userId);
+            var getStripeId = await _unitofWork.PaymentMethodRepository.GetAsync(paymentMethodId);
+            var order = await _unitofWork.OrderRepository.GetAsync(orderId);
+            var cart = await _unitofWork.CartRepository.GetAsync(cartId);
             long payment_Amount = (long)Math.Round((grandTotal * 100));
             var chargeOptions = new ChargeCreateOptions
             {
                 Currency = resource.Currency,
                 Amount = payment_Amount,
-                ReceiptEmail = resource.ReceiptEmail,
-                Customer = resource.CustomerId,
-                Description = resource.Description
+                ReceiptEmail = getEmail,
+                Customer = getStripeId.stripeCustomerId
             };
             var charge = await _chargeService.CreateAsync(chargeOptions, null, cancellationToken);
             var payment = new Payment()
             {
                 Amount = grandTotal,
                 paymentDate = DateTime.Now,
-                Status ="Paid",
+                Status = "Paid",
                 paymentMethodId = paymentMethodId,
                 orderId = orderId
             };
             await _unitofWork.PaymentRepository.PostAsync(payment);
             order.Status = "Placed";
+            cart.cartCheckout = "Yes";
             await _unitofWork.OrderRepository.UpdateAsync(orderId, order);
+            await _unitofWork.CartRepository.UpdateAsync(cartId, cart);
             await _unitofWork.Save();
 
-                return new ChargeResource(
-                charge.Id,
-                charge.Currency,
-                charge.Amount,
-                charge.CustomerId,
-                charge.ReceiptEmail,
-                charge.Description);
+            return new ChargeResource(
+            charge.Id,
+            charge.Currency,
+            charge.Amount,
+            charge.CustomerId,
+            charge.ReceiptEmail
+
+            );
         }
-        
+
     }
 }

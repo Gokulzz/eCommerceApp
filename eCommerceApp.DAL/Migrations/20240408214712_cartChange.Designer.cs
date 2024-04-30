@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCommerceApp.DAL.Data;
 
@@ -11,9 +12,11 @@ using eCommerceApp.DAL.Data;
 namespace eCommerceApp.DAL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240408214712_cartChange")]
+    partial class cartChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,8 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.HasKey("cartID");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("userId")
+                        .IsUnique();
 
                     b.ToTable("Carts");
                 });
@@ -347,6 +351,9 @@ namespace eCommerceApp.DAL.Migrations
                     b.Property<DateTime?>("VerifiedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("cartId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("roleId")
                         .HasColumnType("uniqueidentifier");
 
@@ -375,8 +382,8 @@ namespace eCommerceApp.DAL.Migrations
             modelBuilder.Entity("eCommerceApp.DAL.Models.Cart", b =>
                 {
                     b.HasOne("eCommerceApp.DAL.Models.User", "user")
-                        .WithMany("carts")
-                        .HasForeignKey("userId")
+                        .WithOne("cart")
+                        .HasForeignKey("eCommerceApp.DAL.Models.Cart", "userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -548,7 +555,8 @@ namespace eCommerceApp.DAL.Migrations
 
                     b.Navigation("Products");
 
-                    b.Navigation("carts");
+                    b.Navigation("cart")
+                        .IsRequired();
 
                     b.Navigation("paymentmethods");
                 });

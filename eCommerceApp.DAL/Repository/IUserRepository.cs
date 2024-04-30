@@ -10,6 +10,6 @@ namespace eCommerceApp.DAL.Repository
    public interface IUserRepository : IGenericRepository<User>
     {
         public  Task<User> VerifyUser(Guid token);
-       
+        public Task<string> GetEmail(Guid id);   
     }
 }

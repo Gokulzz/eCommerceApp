@@ -17,8 +17,10 @@ namespace eCommerceApp.DAL.Models
         
         // Navigation property for the user associated with the cart
         public User user { get; set; }
+        public string cartCheckout { get; set; }  
 
         // Collection of items in the cart (association with Product)
+         
         public ICollection<CartItem> CartItems { get; set; }
         
     }

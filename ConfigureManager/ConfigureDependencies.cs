@@ -13,6 +13,7 @@ using eCommerceApp.DAL.Repository;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Stripe;
+using PaymentMethodService = eCommerceApp.BLL.Implementations.PaymentMethodService;
 
 namespace ConfigureManager
 {
@@ -45,6 +46,8 @@ namespace ConfigureManager
             services.AddScoped<IOrderService, OrderService>();  
             services.AddScoped<IShippingAddressService, ShippingAddressService>();
             services.AddScoped<ICartItemService, CartItemService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IStripeService, StripeService>();
             services.AddScoped<TokenService>();
             services.AddScoped<CustomerService>();

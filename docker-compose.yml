@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  e-commerce.pl:
+    image: ${DOCKER_REGISTRY-}ecommercepl
+    build:
+      context: .
+      dockerfile: E-Commerce.PL/Dockerfile
