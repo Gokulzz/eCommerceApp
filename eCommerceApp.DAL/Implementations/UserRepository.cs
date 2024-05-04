@@ -26,7 +26,7 @@ namespace eCommerceApp.DAL.Implementations
         }
         public async Task<string> GetEmail(Guid id)
         {
-            var get_Email = await dataContext.Users.Where(x=>x.Equals(id)).FirstOrDefaultAsync();
+            var get_Email = await dataContext.Users.Where(x => x.userId == id).FirstOrDefaultAsync();
             return get_Email.Email;
                     
         }

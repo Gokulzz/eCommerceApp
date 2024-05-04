@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\eCommerceApp.BLL\eCommerceApp.BLL.csproj" />
-    <ProjectReference Include="..\eCommerceApp.DAL\eCommerceApp.DAL.csproj" />
   </ItemGroup>
 
 </Project>

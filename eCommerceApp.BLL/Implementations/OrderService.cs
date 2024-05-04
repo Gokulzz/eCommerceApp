@@ -12,6 +12,8 @@ using eCommerceApp.BLL.Services;
 using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
 using Microsoft.Identity.Client;
+using Stripe.Climate;
+using Order = eCommerceApp.DAL.Models.Order;
 
 namespace eCommerceApp.BLL.Implementations
 {
@@ -19,15 +21,17 @@ namespace eCommerceApp.BLL.Implementations
     {
         //I need to add the feature of cancelling the order.
         private readonly IUnitofWork unitofWork;
+        private readonly IMessageProducer producer;
         private readonly IUserService userService;
         private readonly IProductService productService;
         public IMapper mapper;
-        public OrderService(IUnitofWork unitofWork, IMapper mapper, IUserService userService, IProductService productService)
+        public OrderService(IUnitofWork unitofWork, IMapper mapper, IUserService userService, IProductService productService, IMessageProducer producer )
         {
             this.unitofWork = unitofWork;
             this.mapper = mapper;
             this.userService = userService;
-            this.productService = productService;   
+            this.productService = productService;  
+            this.producer = producer;
         }
         public async Task<ApiResponse> GetAllOrders()
         {
@@ -76,6 +80,7 @@ namespace eCommerceApp.BLL.Implementations
                     orderId = Guid.NewGuid(); // Generate new orderId
                     var order = await add_Order(userId, orderId, cartItem);
                     await unitofWork.OrderRepository.PostAsync(order);
+                    producer.SendMessage(order);
                 }
                 else
                 {
@@ -94,9 +99,12 @@ namespace eCommerceApp.BLL.Implementations
                     };
                     
                     await unitofWork.OrderdetailRepository.PostAsync(orderItem);
+              
                 }
                 await unitofWork.Save();
-                return new ApiResponse(200, "Order placed successfully", cartItem);
+               
+
+            return new ApiResponse(200, "Order placed successfully", cartItem);
             
             
         }

@@ -1,4 +1,5 @@
-﻿using eCommerceApp.BLL.DTO;
+﻿
+using eCommerceApp.BLL.DTO;
 using eCommerceApp.BLL.Implementations;
 using eCommerceApp.BLL.Services;
 using eCommerceApp.BLL.Stripe;
@@ -13,9 +14,11 @@ namespace E_Commerce.PL.Controllers
     public class StripeController : Controller
     {
         public IStripeService stripeService { get; set; }
+       
         public StripeController(IStripeService stripeService)
         {
             this.stripeService = stripeService;
+         
         }
         [HttpPost("Customer")]
         public async Task<ActionResult<CustomerResource>> CreateCustomer([FromBody] CreateCustomerResource resource, CancellationToken cancellationToken)
@@ -28,6 +31,7 @@ namespace E_Commerce.PL.Controllers
         public async Task<ActionResult<ChargeResource>> CreateCharge([FromBody] CreateChargeResource resource,CancellationToken cancellationToken)
         {
             var response = await stripeService.CreateCharge(resource,cancellationToken);
+           
             return Ok(response);
         }
     }
