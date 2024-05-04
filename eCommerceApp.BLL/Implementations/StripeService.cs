@@ -23,6 +23,8 @@ namespace eCommerceApp.BLL.Implementations
         private readonly IUnitofWork _unitofWork;
         private readonly IUserService _userService;
         private readonly IOrderRepository _orderRepository;
+        private readonly IMessageProducer _messageProducer;
+        private readonly IConsumeMessage _consumeMessage;
 
         public StripeService(
             TokenService tokenService,
@@ -30,7 +32,9 @@ namespace eCommerceApp.BLL.Implementations
             ChargeService chargeService,
             IUnitofWork unitofWork,
             IUserService userService,
-            IOrderRepository orderRepository)
+            IMessageProducer messageProducer,
+            IOrderRepository orderRepository,
+            IConsumeMessage consumeMessage)
         {
             _tokenService = tokenService;
             _customerService = customerService;
@@ -38,6 +42,9 @@ namespace eCommerceApp.BLL.Implementations
             _unitofWork = unitofWork;
             _userService = userService;
             _orderRepository = orderRepository;
+            _messageProducer = messageProducer;
+            _consumeMessage= consumeMessage;
+
 
         }
 
@@ -135,6 +142,8 @@ namespace eCommerceApp.BLL.Implementations
             await _unitofWork.OrderRepository.UpdateAsync(orderId, order);
             await _unitofWork.CartRepository.UpdateAsync(cartId, cart);
             await _unitofWork.Save();
+            _consumeMessage.Subscribe();
+            
 
             return new ChargeResource(
             charge.Id,

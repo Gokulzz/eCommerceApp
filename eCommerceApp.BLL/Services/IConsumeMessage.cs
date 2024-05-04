@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCommerceApp.BLL.Stripe
+namespace eCommerceApp.BLL.Services
 {
-    public class CreateChargeResource
+    public interface IConsumeMessage
     {
-      public string Currency { get; set; }    
-     
+        public void Subscribe();
     }
 }

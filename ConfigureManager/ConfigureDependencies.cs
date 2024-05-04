@@ -49,15 +49,21 @@ namespace ConfigureManager
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IStripeService, StripeService>();
+            services.AddSingleton<IRabbitMqConnection>(new RabbitMqConnection());
+            services.AddScoped<IMessageProducer, RabbitMQProducer>(); 
             services.AddScoped<TokenService>();
             services.AddScoped<CustomerService>();
             services.AddScoped<ChargeService>();
-            
-
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IConsumeMessage, ConsumeMessage>();
             services.AddValidatorsFromAssemblyContaining<UserValidator>();
             services.AddControllers().AddJsonOptions(x =>
               x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
+
+
+
         }
 
     }
