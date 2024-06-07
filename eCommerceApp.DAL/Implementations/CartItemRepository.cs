@@ -28,7 +28,7 @@ namespace eCommerceApp.DAL.Implementations
        public async Task<List<CartItem>> GetIDandQuantity(Guid cartId)
        {
            var cartItems = await dataContext.CartItems.ToListAsync();
-           var get_cartItem = from x in cartItems
+           var get_cartItem =from x in cartItems
                        where x.CartID == cartId
                        select new CartItem()
                        {
@@ -38,6 +38,8 @@ namespace eCommerceApp.DAL.Implementations
 
             return get_cartItem.ToList();
        }
+       
+      
 
 
     }

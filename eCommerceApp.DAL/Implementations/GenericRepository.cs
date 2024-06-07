@@ -51,7 +51,7 @@ namespace eCommerceApp.DAL.Implementations
             }
 
             // Update the existing entity with the values from the provided entity
-            dataContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+             dataContext.Entry(existingEntity).CurrentValues.SetValues(entity);
 
             return existingEntity;
         }

@@ -10,6 +10,8 @@ using eCommerceApp.DAL.Models;
 using eCommerceApp.DAL.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Client;
 using Stripe;
 
 namespace eCommerceApp.BLL.Implementations
@@ -17,41 +19,37 @@ namespace eCommerceApp.BLL.Implementations
 
     public class StripeService : IStripeService
     {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly TokenService _tokenService;
         private readonly CustomerService _customerService;
         private readonly ChargeService _chargeService;
-        private readonly IUnitofWork _unitofWork;
         private readonly IUserService _userService;
-        private readonly IOrderRepository _orderRepository;
         private readonly IMessageProducer _messageProducer;
         private readonly IConsumeMessage _consumeMessage;
 
         public StripeService(
+            IServiceScopeFactory serviceScopeFactory,
             TokenService tokenService,
             CustomerService customerService,
             ChargeService chargeService,
-            IUnitofWork unitofWork,
             IUserService userService,
             IMessageProducer messageProducer,
-            IOrderRepository orderRepository,
             IConsumeMessage consumeMessage)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             _tokenService = tokenService;
             _customerService = customerService;
             _chargeService = chargeService;
-            _unitofWork = unitofWork;
             _userService = userService;
-            _orderRepository = orderRepository;
             _messageProducer = messageProducer;
-            _consumeMessage= consumeMessage;
-
-
+            _consumeMessage = consumeMessage;
         }
 
         public async Task<CustomerResource> CreateCustomer(CreateCustomerResource resource, CancellationToken cancellationToken)
         {
-            try
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitofWork>();
 
                 var tokenOptions = new TokenCreateOptions
                 {
@@ -63,7 +61,6 @@ namespace eCommerceApp.BLL.Implementations
                         ExpMonth = resource.card.ExpiryMonth,
                         Cvc = resource.card.Cvc
                     }
-
                 };
 
                 var token = await _tokenService.CreateAsync(tokenOptions, null, cancellationToken);
@@ -74,7 +71,9 @@ namespace eCommerceApp.BLL.Implementations
                     Name = resource.Name,
                     Source = token.Id
                 };
+
                 var customer = await _customerService.CreateAsync(customerOptions, null, cancellationToken);
+
                 var paymentMethod = new CustomerPaymentMethod()
                 {
                     userId = _userService.GetCurrentId(),
@@ -84,76 +83,93 @@ namespace eCommerceApp.BLL.Implementations
                     Type = "Credit",
                     Brand = "Visa",
                     Last4 = resource.card.Number.Substring(resource.card.Number.Length - 4, 4)
-
-
                 };
-                await _unitofWork.PaymentMethodRepository.PostAsync(paymentMethod);
-                await _unitofWork.Save();
 
+                await unitOfWork.PaymentMethodRepository.PostAsync(paymentMethod);
+                await unitOfWork.Save();
 
                 return new CustomerResource(customer.Id, customer.Email, customer.Name);
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
-
-
         }
 
         public async Task<ChargeResource> CreateCharge(CreateChargeResource resource, CancellationToken cancellationToken)
         {
-            if (resource == null)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitofWork>();
 
-                throw new ArgumentNullException(nameof(resource));
+                if (resource == null)
+                {
+                    throw new ArgumentNullException(nameof(resource));
+                }
+
+                var userId = _userService.GetCurrentId();
+                var getEmail = await unitOfWork.UserRepository.GetEmail(userId);
+                var orderId = await unitOfWork.OrderRepository.GetOrderId(userId);
+                var cartId = await unitOfWork.CartRepository.GetCartId(userId);
+                var grandTotal = await unitOfWork.OrderRepository.GetOrderAmount(orderId);
+                var paymentMethodId = await unitOfWork.PaymentMethodRepository.GetPaymentMethodId(userId);
+                var getStripeId = await unitOfWork.PaymentMethodRepository.GetAsync(paymentMethodId);
+                var order = await unitOfWork.OrderRepository.GetAsync(orderId);
+                var cart = await unitOfWork.CartRepository.GetAsync(cartId);
+                long payment_Amount = (long)Math.Round((grandTotal * 100));
+
+                var chargeOptions = new ChargeCreateOptions
+                {
+                    Currency = resource.Currency,
+                    Amount = payment_Amount,
+                    ReceiptEmail = getEmail,
+                    Customer = getStripeId.stripeCustomerId
+                };
+
+                var charge = await _chargeService.CreateAsync(chargeOptions, null, cancellationToken);
+
+                var payment = new Payment()
+                {
+                    Amount = grandTotal,
+                    paymentDate = DateTime.Now,
+                    Status = "Paid",
+                    paymentMethodId = paymentMethodId,
+                    orderId = orderId
+                };
+
+                await unitOfWork.PaymentRepository.PostAsync(payment);
+                order.Status = "Placed";
+                cart.cartCheckout = "Yes";
+                await unitOfWork.OrderRepository.UpdateAsync(orderId, order);
+                await unitOfWork.CartRepository.UpdateAsync(cartId, cart);
+                await unitOfWork.Save();
+
+                _consumeMessage.Subscribe();
+                await UpdateProductInfo(cartId);
+
+                return new ChargeResource(
+                    charge.Id,
+                    charge.Currency,
+                    charge.Amount,
+                    charge.CustomerId,
+                    charge.ReceiptEmail
+                );
             }
-            //we are converting the amount to smallest currency  which helps avoid rounding errors and ensures that
-            //the calculations are performed with integer values.
-            var userId = _userService.GetCurrentId();
-            var getEmail = await _unitofWork.UserRepository.GetEmail(userId);
-            var orderId = await _unitofWork.OrderRepository.GetOrderId(userId);
-            var cartId = await _unitofWork.CartRepository.GetCartId(userId);
-            var grandTotal = await _unitofWork.OrderRepository.GetOrderAmount(orderId);
-            var paymentMethodId = await _unitofWork.PaymentMethodRepository.GetPaymentMethodId(userId);
-            var getStripeId = await _unitofWork.PaymentMethodRepository.GetAsync(paymentMethodId);
-            var order = await _unitofWork.OrderRepository.GetAsync(orderId);
-            var cart = await _unitofWork.CartRepository.GetAsync(cartId);
-            long payment_Amount = (long)Math.Round((grandTotal * 100));
-            var chargeOptions = new ChargeCreateOptions
-            {
-                Currency = resource.Currency,
-                Amount = payment_Amount,
-                ReceiptEmail = getEmail,
-                Customer = getStripeId.stripeCustomerId
-            };
-            var charge = await _chargeService.CreateAsync(chargeOptions, null, cancellationToken);
-            var payment = new Payment()
-            {
-                Amount = grandTotal,
-                paymentDate = DateTime.Now,
-                Status = "Paid",
-                paymentMethodId = paymentMethodId,
-                orderId = orderId
-            };
-            await _unitofWork.PaymentRepository.PostAsync(payment);
-            order.Status = "Placed";
-            cart.cartCheckout = "Yes";
-            await _unitofWork.OrderRepository.UpdateAsync(orderId, order);
-            await _unitofWork.CartRepository.UpdateAsync(cartId, cart);
-            await _unitofWork.Save();
-            _consumeMessage.Subscribe();
-            
-
-            return new ChargeResource(
-            charge.Id,
-            charge.Currency,
-            charge.Amount,
-            charge.CustomerId,
-            charge.ReceiptEmail
-
-            );
         }
 
+        public async Task UpdateProductInfo(Guid cartId)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitofWork>();
+
+                var products = await unitOfWork.CartItemRepository.GetIDandQuantity(cartId);
+                foreach (var product in products)
+                {
+                    var get_Quantity = await unitOfWork.ProductRepository.getProductQuantity(product.ProductID);
+                    var get_Product = await unitOfWork.ProductRepository.GetAsync(product.ProductID);
+                    get_Product.Quantity = get_Quantity - product.Quantity;
+                    await unitOfWork.ProductRepository.UpdateAsync(product.ProductID, get_Product);
+                }
+                await unitOfWork.Save();
+            }
+        }
     }
+
 }
