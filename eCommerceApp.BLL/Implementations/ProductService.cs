@@ -75,6 +75,7 @@ namespace eCommerceApp.BLL.Implementations
 
         }
         //I have to fix the conversion of product name into lowercase fix the logic.............
+        
         public async Task<ApiResponse> GetByName(string productName)
         {
             var product= await unitofWork.ProductRepository.GetProductByName(productName);

@@ -54,6 +54,10 @@ try
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
+    //builder.Services.AddDbContextFactory<DataContext>(options =>
+    //{
+    //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    //});
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("V1", new OpenApiInfo

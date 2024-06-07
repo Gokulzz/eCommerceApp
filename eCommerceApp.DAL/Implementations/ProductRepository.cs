@@ -40,6 +40,11 @@ namespace eCommerceApp.DAL.Implementations
             var product= await dataContext.Products.Where(x=>x.Name==productName).FirstOrDefaultAsync();
             return product;
         }
+        public async Task<int> getProductQuantity(Guid id)
+        {
+            var get_Product= await dataContext.Products.Where(x=>x.productId==id).FirstOrDefaultAsync();
+            return get_Product.Quantity;
+        }
     }
     
 }
