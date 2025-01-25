@@ -4,7 +4,7 @@
 
 ## Architecture
 
-Our application is designed using a Microservices architecture, featuring separate repositories and service layers for distinct functionalities. This approach empowers us to maintain scalability, flexibility, and modularity in our system.
+Application is designed using a repository and unit of work pattern, featuring separate repositories and service layers for distinct functionalities. This approach empowers us to maintain scalability, flexibility, and modularity in our system.
 
 ## Technology Stack
 
